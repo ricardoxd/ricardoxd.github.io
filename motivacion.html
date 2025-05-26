@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Frases Motivacionales</title>
+    <style>
+        /* Mantenemos los estilos anteriores */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .contenedor {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        #frase {
+            font-size: 1.5em;
+            line-height: 1.6;
+            color: #34495e;
+            margin: 20px 0;
+            min-height: 100px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .autor {
+            display: block;
+            margin-top: 15px;
+            font-style: italic;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>100 Frases Motivacionales</h1>
+        <div id="frase"></div>
+        <button onclick="mostrarFraseAleatoria()">Nueva Frase</button>
+    </div>
+
+    <script>
+        const generadores = {
+            inicios: [
+                    "El éxito comienza cuando decides intentarlo.",
+
+    "No esperes el momento perfecto, toma el momento y hazlo perfecto.",
+
+    "Cada día es una nueva oportunidad para cambiar tu vida.",
+
+    "Si puedes soñarlo, puedes lograrlo." ,
+
+    "El miedo te paraliza; la acción te libera.",
+
+    "No cuentes los días, haz que los días cuenten.",
+
+    "La disciplina es el puente entre tus metas y tus logros.",
+
+    "El fracaso es solo una oportunidad para comenzar de nuevo, esta vez con más experiencia.",
+
+    "Tú eres dueño de tu actitud: elige la persistencia sobre la excusa.",
+
+    "No importa lo lento que avances, siempre y cuando no te detengas." ,
+
+    "La vida es 10% lo que te pasa y 90% cómo reaccionas.",
+
+    "Si no puedes volar, corre; si no puedes correr, camina; si no puedes caminar, arrástrate… pero sigue avanzando.",
+
+    "El único límite para tus logros es tu mente.",
+
+    "No dejes que el miedo a perder sea mayor que la emoción de ganar.",
+
+    "El esfuerzo no se traiciona: tarde o temprano, da frutos.",
+
+    "Sé tan fuerte como necesites ser y tan suave como puedas serlo.",
+
+    "Nunca es tarde para ser la persona que podrías haber sido.",
+
+    "La felicidad no es algo hecho. Viene de tus propias acciones.",
+
+    "Si quieres algo que nunca has tenido, tendrás que hacer algo que nunca has hecho.",
+
+    "El futuro pertenece a quienes creen en la belleza de sus sueños." ,
+
+    "No te rindas. Las mejores cosas llevan tiempo.",
+
+    "La única forma de hacer un gran trabajo es amar lo que haces.",
+
+    "La vida no se trata de encontrarte a ti mismo, sino de crearte a ti mismo.",
+
+    "No midas tu éxito por lo que logras, sino por los obstáculos que superas.",
+
+    "El primer paso hacia el éxito es creer que puedes lograrlo.",
+
+    "No dejes que tus miedos decidan tu futuro.",
+
+    "La energía fluye donde va la atención.",
+
+    "La suerte es lo que sucede cuando la preparación se encuentra con la oportunidad." ,
+
+    "Si no te arriesgas, no podrás crear un futuro diferente.",
+
+    "No eres derrotado cuando pierdes, sino cuando abandonas.",
+
+    "Lo imposible solo toma un poco más de tiempo.",
+
+    "El camino puede ser difícil, pero la cima siempre vale la pena.",
+
+    "La grandeza no está en caer, sino en levantarse cada vez que caes.",
+
+    "El cambio duele, pero es necesario para crecer.",
+
+    "No esperes a que te den luz verde: construye tu propio semáforo.",
+
+    "No dejes que el ruido de las opiniones ajenas ahogue tu voz interior." ,
+
+    "El éxito no es para los que nunca fallan, sino para los que nunca se rinden.",
+
+    "El único error es no intentarlo.",
+
+    "Haz de tu vida una obra maestra, no un borrador.",
+
+    "No tienes que ser grande para empezar, pero tienes que empezar para ser grande.",
+
+    "El coraje no es la ausencia de miedo, sino el triunfo sobre él." ,
+
+    "El sol siempre brilla detrás de las nubes; sigue adelante.",
+
+    "La pasión mueve montañas; la mediocridad construye paredes.",
+
+    "No te compares con nadie: tú eres único/a y tu camino también.",
+
+    "La vida es corta para vivirla sin propósito.",
+
+    "La diferencia entre lo ordinario y lo extraordinario es ese pequeño 'extra'.",
+
+    "Si caes 7 veces, levántate 8." ,
+
+    "El que quiere hacer algo encuentra un modo; el que no, una excusa.",
+
+    "Tu mente es poderosa: no la llenes de dudas.",
+
+    "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
+
+    "No dejes que nadie te diga que no puedes. Ni siquiera tú.",
+
+    "El fracaso es el condimento que da sabor al éxito.",
+
+    "El momento para empezar es ahora.",
+
+    "Si no sueñas, nunca encontrarás lo que hay más allá de tus sueños.",
+
+    "La excelencia no es un acto, sino un hábito." ,
+
+    "No vivas el mismo año 75 veces y lo llames vida.",
+
+    "La mejor venganza es el éxito masivo." ,
+
+    "El miedo es una ilusión; la acción es la cura.",
+
+    "No eres lo que logras, eres lo que superas.",
+
+    "El mundo cambia con tu ejemplo, no con tu opinión." ,
+
+    "El éxito es ir de fracaso en fracaso sin perder el entusiasmo." ,
+
+    "No temas a las tormentas, aprende a bailar bajo la lluvia.",
+
+    "La vida es como una cámara: enfócate en lo importante, captura los buenos momentos y sigue avanzando.",
+
+    "El que no arriesga, no gana.",
+
+    "Hoy es el primer día del resto de tu vida.",
+
+    "No dejes que el pasado robe tu presente.",
+
+    "La única persona que puede limitarte eres tú mismo/a.",
+
+    "Si no fallas de vez en cuando, es señal de que no estás innovando." ,
+
+    "El mejor proyecto en el que puedes trabajar eres tú mismo/a.",
+
+    "La persistencia convierte el 'no' en 'ahora', 'mañana' y 'sí'.",
+
+    "No busques la perfección, busca el progreso.",
+
+    "La adversidad revela el carácter; la comodidad, la mediocridad.",
+
+    "Solo aquellos que se atreven a fallar pueden lograr grandes cosas." ,
+
+    "La vida es demasiado corta para vivirla sin pasión.",
+
+    "El optimismo es la fe que lleva al logro.",
+
+    "No dejes que lo que no puedes hacer interfiera con lo que sí puedes hacer.",
+
+    "La confianza en sí mismo es el primer secreto del éxito." ,
+
+    "Si no estás dispuesto/a a arriesgar, estás dispuesto/a a conformarte.",
+
+    "El éxito no es final, el fracaso no es fatal: lo que cuenta es el coraje para continuar." ,
+
+    "No hay ascensor al éxito: tendrás que subir las escaleras.",
+
+    "El miedo es una reacción; el coraje es una decisión.",
+
+    "La única forma de alcanzar lo imposible es creer que es posible." ,
+
+    "No esperes a que las cosas pasen; haz que pasen.",
+
+    "El éxito no es para los genios, sino para los persistentes.",
+
+    "La mente es como un paracaídas: solo funciona si se abre.",
+
+    "Si quieres volar, suelta todo lo que te pesa.",
+
+    "El tiempo nunca vuelve atrás, pero tú siempre puedes empezar de nuevo.",
+
+    "No dejes que tu historia pasada defina tu futuro.",
+
+    "La vida es una aventura: atrévete a vivirla.",
+
+    "El mundo pertenece a los que se atreven.",
+
+    "No eres viejo/a hasta que los lamentos reemplazan a los sueños.",
+
+    "La felicidad no es un destino, es una forma de viajar.",
+
+    "La clave no es priorizar lo que está en tu agenda, sino agendar tus prioridades.",
+
+    "No subestimes el poder de un pequeño paso: los océanos se cruzan remando.",
+
+    "Los sueños no funcionan a menos que tú lo hagas.",
+
+    "La vida te devuelve lo que tú le das: siembra coraje, cosecha éxito.",
+
+    "El talento gana partidos, pero el trabajo en equipo gana campeonatos.",
+
+    "No te preocupes por los errores: preocúpate por no intentarlo.",
+
+    "La única barrera entre tú y tus sueños es la historia que te repites.",
+
+    "Tú eres el arquitecto/a de tu vida: construye con pasión, propósito y perseverancia."
+            ],
+            
+            acciones: [
+                "la consistencia diaria",
+                "pequeños esfuerzos constantes",
+                "una mente positiva",
+                "la autodisciplina",
+                "la pasión inquebrantable",
+                "la gratitud permanente",
+                "superar tus miedos",
+                "aprender de los errores",
+                "mantener el enfoque",
+                "cultivar buenos hábitos"
+            ],
+            
+            finales: [
+                "y transformarás tu realidad",
+                "para alcanzar tus metas",
+                "más allá de tus límites",
+                "creando un impacto duradero",
+                "en cada aspecto de tu vida",
+                "convirtiendo sueños en acciones",
+                "construyendo tu mejor versión",
+                "superando todas las expectativas",
+                "en un mundo lleno de posibilidades",
+                "con determinación y coraje"
+            ],
+            
+            autores: [
+                "La IA DeekSeek"
+            ]
+        };
+
+        function generarFrases() {
+            const frases = [];
+            const combinacionesUnicas = new Set();
+            
+            while(frases.length < 1000) {
+                const inicio = generadores.inicios[Math.floor(Math.random() * generadores.inicios.length)];
+                const accion = generadores.acciones[Math.floor(Math.random() * generadores.acciones.length)];
+                const final = generadores.finales[Math.floor(Math.random() * generadores.finales.length)];
+                const autor = generadores.autores[Math.floor(Math.random() * generadores.autores.length)];
+                
+                const fraseCompleta = `${inicio} ${accion} ${final}`;
+                const comboUnico = `${inicio}|${accion}|${final}`;
+                
+                if(!combinacionesUnicas.has(comboUnico)) {
+                    combinacionesUnicas.add(comboUnico);
+                    frases.push({
+                        texto: fraseCompleta,
+                        autor: autor
+                    });
+                }
+            }
+            return frases;
+        }
+
+        const frasesMotivacionales = generarFrases();
+
+        function leerTexto(texto) {
+            if ('speechSynthesis' in window) {
+                const synthesis = window.speechSynthesis;
+                synthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(texto);
+                utterance.lang = 'es-ES';
+                utterance.rate = 1.1;
+                
+                const voices = synthesis.getVoices();
+                const spanishVoice = voices.find(voice => voice.lang === 'es-ES');
+                if(spanishVoice) utterance.voice = spanishVoice;
+                
+                synthesis.speak(utterance);
+                
+                setTimeout(mostrarFraseAleatoria, 20000);
+                setBackground()
+            }
+        }
+        function setBackground() {
+        const apiKey = 'YmQtmc465hPFEBzyavFK9GQA4eIQq6iQrSR1Ne4iDEebZc1EfQtFTn18';
+        const imageUrl = `https://api.pexels.com/v1/curated?per_page=1&page=${Math.floor(Math.random() * 1000)}`;
+        const videoUrl = `https://api.pexels.com/videos/popular?per_page=1&page=${Math.floor(Math.random() * 1000)}`;
+
+        const isVideo = Math.random() < 0.5; // Decidir aleatoriamente entre imagen o video
+
+        fetch(isVideo ? videoUrl : imageUrl, {
+            headers: {
+                Authorization: apiKey
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (isVideo) {
+                const videoSrc = data.videos[0].video_files.find(file => file.quality === 'sd').link;
+                const videoElement = document.createElement('video');
+                videoElement.src = videoSrc;
+                videoElement.autoplay = true;
+                videoElement.loop = true;
+                videoElement.muted = true;
+                gameScreen.appendChild(videoElement);
+            } else {
+                const imageUrl = data.photos[0].src.large;
+                document.body.style.backgroundImage = `url('${imageUrl}')`;
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener el fondo del nivel:', error);
+            // Si hay un error, se puede establecer un fondo predeterminado
+            document.body.style.backgroundImage = `url('ruta/a/imagen-predeterminada.jpg')`;
+        });
+    }
+        function mostrarFraseAleatoria() {
+            const fraseContainer = document.getElementById('frase');
+            const indiceAleatorio = Math.floor(Math.random() * frasesMotivacionales.length);
+            const fraseSeleccionada = frasesMotivacionales[indiceAleatorio];
+            
+            fraseContainer.innerHTML = `
+                <blockquote>
+                    "${fraseSeleccionada.texto}"
+                    <span class="autor">- ${fraseSeleccionada.autor}</span>
+                </blockquote>
+            `;
+            
+            leerTexto(fraseSeleccionada.texto);
+        }
+
+        window.onload = mostrarFraseAleatoria;
+    </script>
+</body>
+</html>
