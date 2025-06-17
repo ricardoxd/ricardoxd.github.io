@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deporte de Combate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Pantalla de Login */
+        .login-screen {
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .logo {
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-size: 2.8rem;
+            color: #1a2a6c;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo span {
+            color: #b21f1f;
+        }
+        
+        .login-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #1a2a6c;
+            outline: none;
+        }
+        
+        .login-btn {
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Pantalla de Combate */
+        .combat-screen {
+            display: none;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #1a2a6c;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .user-info {
+            font-weight: 600;
+        }
+        
+        .logout-btn {
+            background: #b21f1f;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .combat-area {
+            display: flex;
+            margin: 20px 0;
+            height: 380px;
+        }
+        
+        .competitor {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .competitor-blue {
+            background: linear-gradient(to bottom, #1a75ff, #0052cc);
+            color: white;
+        }
+        
+        .competitor-red {
+            background: linear-gradient(to bottom, #ff4d4d, #cc0000);
+            color: white;
+        }
+        
+        .competitor h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .score {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+        }
+        
+        .fouls {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .fouls span {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        .points-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 15px;
+        }
+        
+        .foul-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .action-btn {
+            padding: 12px 0;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .blue-btn {
+            background: #0047b3;
+            color: white;
+            box-shadow: 0 4px 0 #003380;
+        }
+        
+        .red-btn {
+            background: #cc0000;
+            color: white;
+            box-shadow: 0 4px 0 #990000;
+        }
+        
+        .foul-btn {
+            background: #333;
+            color: white;
+            box-shadow: 0 4px 0 #111;
+        }
+        
+        .divider {
+            width: 10px;
+            background: #333;
+        }
+        
+        .timer-section {
+            background: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .round-info {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .timer-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .timer-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .start-btn {
+            background: linear-gradient(to right, #00b300, #008000);
+            color: white;
+            box-shadow: 0 4px 0 #006600;
+        }
+        
+        .reset-btn {
+            background: linear-gradient(to right, #ff9900, #e67300);
+            color: white;
+            box-shadow: 0 4px 0 #cc6600;
+        }
+        
+        /* Registro de puntos */
+        .log-section {
+            background: white;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .log-section h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #1a2a6c;
+            font-size: 1.4rem;
+        }
+        
+        .log-container {
+            height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        
+        .log-entry {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .blue-log {
+            color: #1a75ff;
+        }
+        
+        .red-log {
+            color: #ff4d4d;
+        }
+        
+        /* Mensajes de resultado */
+        .result-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .result-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .result-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #1a2a6c;
+        }
+        
+        .winner {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .blue-winner {
+            color: #1a75ff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .red-winner {
+            color: #ff4d4d;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result-stats {
+            margin: 25px 0;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+        
+        .close-result {
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .close-result:hover {
+            background: #b21f1f;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .combat-area {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .divider {
+                width: 100%;
+                height: 10px;
+            }
+            
+            .points-buttons, .foul-buttons {
+                max-width: 100%;
+            }
+            
+            .score {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de Login -->
+    <div class="container">
+        <div class="login-screen" id="loginScreen">
+            <div class="logo">
+                <h1>Sistema de <span>Combate</span></h1>
+            </div>
+            <div class="login-form">
+                <div class="input-group">
+                    <label for="username">Usuario:</label>
+                    <input type="text" id="username" placeholder="Ingrese su usuario">
+                </div>
+                <div class="input-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" placeholder="Ingrese su contraseña">
+                </div>
+                <button class="login-btn" id="loginBtn">Iniciar Sesión</button>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Combate -->
+        <div class="combat-screen" id="combatScreen">
+            <div class="header">
+                <div class="user-info" id="userInfo">Usuario: Invitado</div>
+                <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
+            </div>
+            
+            <div class="combat-area">
+                <div class="competitor competitor-blue">
+                    <h2>Competidor Azul</h2>
+                    <div class="score" id="blueScore">0</div>
+                    <div class="fouls">Faltas: <span id="blueFouls">0</span></div>
+                    
+                    <div class="points-buttons">
+                        <button class="action-btn blue-btn" onclick="addPoints('blue', 1)">+1</button>
+                        <button class="action-btn blue-btn" onclick="addPoints('blue', 2)">+2</button>
+                        <button class="action-btn blue-btn" onclick="addPoints('blue', 3)">+3</button>
+                    </div>
+                    
+                    <div class="foul-buttons">
+                        <button class="action-btn foul-btn" onclick="addFoul('blue', 1)">Falta (-1)</button>
+                        <button class="action-btn foul-btn" onclick="addFoul('blue', 0.5)">Falta (-0.5)</button>
+                    </div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="competitor competitor-red">
+                    <h2>Competidor Rojo</h2>
+                    <div class="score" id="redScore">0</div>
+                    <div class="fouls">Faltas: <span id="redFouls">0</span></div>
+                    
+                    <div class="points-buttons">
+                        <button class="action-btn red-btn" onclick="addPoints('red', 1)">+1</button>
+                        <button class="action-btn red-btn" onclick="addPoints('red', 2)">+2</button>
+                        <button class="action-btn red-btn" onclick="addPoints('red', 3)">+3</button>
+                    </div>
+                    
+                    <div class="foul-buttons">
+                        <button class="action-btn foul-btn" onclick="addFoul('red', 1)">Falta (-1)</button>
+                        <button class="action-btn foul-btn" onclick="addFoul('red', 0.5)">Falta (-0.5)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timer-section">
+                <div class="round-info">Round: <span id="currentRound">1</span>/3</div>
+                <div class="timer-display" id="timerDisplay">02:00</div>
+                <div class="timer-controls">
+                    <button class="timer-btn start-btn" id="startBtn">Iniciar Round</button>
+                    <button class="timer-btn reset-btn" id="resetBtn">Reiniciar</button>
+                </div>
+            </div>
+            
+            <div class="log-section">
+                <h3>Registro de Acciones</h3>
+                <div class="log-container" id="logContainer">
+                    <!-- Las entradas de registro se añadirán aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mensaje de Resultado -->
+    <div class="result-message" id="resultMessage">
+        <div class="result-content">
+            <h2>Combate Finalizado</h2>
+            <div class="result-stats">
+                <p>Puntos Azul: <span id="finalBluePoints">0</span></p>
+                <p>Puntos Rojo: <span id="finalRedPoints">0</span></p>
+                <p>Faltas Azul: <span id="finalBlueFouls">0</span></p>
+                <p>Faltas Rojo: <span id="finalRedFouls">0</span></p>
+            </div>
+            <div class="winner" id="winnerText">Empate</div>
+            <button class="close-result" id="closeResult">Cerrar</button>
+        </div>
+    </div>
+    
+    <script>
+        // Variables de estado
+        let bluePoints = 0;
+        let blueFouls = 0;
+        let redPoints = 0;
+        let redFouls = 0;
+        let currentRound = 1;
+        let timerInterval;
+        let timeLeft = 120; // 2 minutos en segundos
+        let isTimerRunning = false;
+        let username = "Invitado";
+        
+        // Elementos DOM
+        const loginScreen = document.getElementById('loginScreen');
+        const combatScreen = document.getElementById('combatScreen');
+        const userInfo = document.getElementById('userInfo');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const roundDisplay = document.getElementById('currentRound');
+        const blueScoreDisplay = document.getElementById('blueScore');
+        const redScoreDisplay = document.getElementById('redScore');
+        const blueFoulsDisplay = document.getElementById('blueFouls');
+        const redFoulsDisplay = document.getElementById('redFouls');
+        const logContainer = document.getElementById('logContainer');
+        const resultMessage = document.getElementById('resultMessage');
+        const finalBluePoints = document.getElementById('finalBluePoints');
+        const finalRedPoints = document.getElementById('finalRedPoints');
+        const finalBlueFouls = document.getElementById('finalBlueFouls');
+        const finalRedFouls = document.getElementById('finalRedFouls');
+        const winnerText = document.getElementById('winnerText');
+        const closeResult = document.getElementById('closeResult');
+        
+        // Iniciar sesión
+        loginBtn.addEventListener('click', () => {
+            const usernameInput = document.getElementById('username').value;
+            const passwordInput = document.getElementById('password').value;
+            
+            if (usernameInput && passwordInput) {
+                username = usernameInput;
+                userInfo.textContent = `Usuario: ${username}`;
+                loginScreen.style.display = 'none';
+                combatScreen.style.display = 'block';
+                addLog('Sesión iniciada');
+            } else {
+                alert('Por favor, ingrese usuario y contraseña');
+            }
+        });
+        
+        // Cerrar sesión
+        logoutBtn.addEventListener('click', () => {
+            combatScreen.style.display = 'none';
+            loginScreen.style.display = 'block';
+            resetGame();
+            addLog('Sesión cerrada');
+        });
+        
+        // Agregar puntos
+        function addPoints(competitor, points) {
+            if (!isTimerRunning) {
+                addLog('El round no ha comenzado');
+                return;
+            }
+            
+            if (competitor === 'blue') {
+                bluePoints += points;
+                blueScoreDisplay.textContent = bluePoints;
+                addLog(`Azul suma +${points} puntos`, 'blue');
+            } else {
+                redPoints += points;
+                redScoreDisplay.textContent = redPoints;
+                addLog(`Rojo suma +${points} puntos`, 'red');
+            }
+            
+            checkFouls();
+        }
+        
+        // Agregar falta
+        function addFoul(competitor, foulPoints) {
+            if (!isTimerRunning) {
+                addLog('El round no ha comenzado');
+                return;
+            }
+            
+            if (competitor === 'blue') {
+                blueFouls += foulPoints;
+                blueFoulsDisplay.textContent = blueFouls.toFixed(1);
+                addLog(`Azul comete falta: -${foulPoints}`, 'blue');
+            } else {
+                redFouls += foulPoints;
+                redFoulsDisplay.textContent = redFouls.toFixed(1);
+                addLog(`Rojo comete falta: -${foulPoints}`, 'red');
+            }
+            
+            checkFouls();
+        }
+        
+        // Verificar faltas acumuladas
+        function checkFouls() {
+            if (blueFouls >= 3) {
+                endGame('red');
+            } else if (redFouls >= 3) {
+                endGame('blue');
+            }
+        }
+        
+        // Iniciar temporizador
+        startBtn.addEventListener('click', () => {
+            if (isTimerRunning) return;
+            
+            isTimerRunning = true;
+            startBtn.textContent = 'Round en curso';
+            startBtn.disabled = true;
+            addLog(`Round ${currentRound} iniciado`);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    isTimerRunning = false;
+                    
+                    if (currentRound < 3) {
+                        currentRound++;
+                        roundDisplay.textContent = currentRound;
+                        timeLeft = 120;
+                        updateTimerDisplay();
+                        startBtn.textContent = 'Iniciar Round';
+                        startBtn.disabled = false;
+                        addLog(`Round ${currentRound-1} finalizado. Preparando round ${currentRound}`);
+                    } else {
+                        endGame();
+                    }
+                }
+            }, 1000);
+        });
+        
+        // Reiniciar juego
+        resetBtn.addEventListener('click', () => {
+            resetGame();
+            addLog('Juego reiniciado');
+        });
+        
+        // Actualizar visualización del temporizador
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Agregar entrada al registro
+        function addLog(message, type) {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            if (type === 'blue') {
+                logEntry.classList.add('blue-log');
+            } else if (type === 'red') {
+                logEntry.classList.add('red-log');
+            }
+            
+            const now = new Date();
+            const timestamp = `[${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}]`;
+            
+            logEntry.textContent = `${timestamp} ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        // Finalizar juego
+        function endGame(winner = null) {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            
+            // Determinar ganador si no se determinó por faltas
+            if (!winner) {
+                if (bluePoints > redPoints) {
+                    winner = 'blue';
+                } else if (redPoints > bluePoints) {
+                    winner = 'red';
+                } else {
+                    // Empate en puntos - revisar faltas
+                    if (blueFouls < redFouls) {
+                        winner = 'blue';
+                    } else if (redFouls < blueFouls) {
+                        winner = 'red';
+                    } else {
+                        winner = 'tie';
+                    }
+                }
+            }
+            
+            // Mostrar resultados
+            finalBluePoints.textContent = bluePoints;
+            finalRedPoints.textContent = redPoints;
+            finalBlueFouls.textContent = blueFouls.toFixed(1);
+            finalRedFouls.textContent = redFouls.toFixed(1);
+            
+            if (winner === 'blue') {
+                winnerText.textContent = 'GANA AZUL';
+                winnerText.className = 'winner blue-winner';
+                addLog('Combate finalizado: Gana Azul');
+            } else if (winner === 'red') {
+                winnerText.textContent = 'GANA ROJO';
+                winnerText.className = 'winner red-winner';
+                addLog('Combate finalizado: Gana Rojo');
+            } else {
+                winnerText.textContent = 'EMPATE';
+                winnerText.className = 'winner';
+                addLog('Combate finalizado: Empate');
+            }
+            
+            resultMessage.style.display = 'flex';
+        }
+        
+        // Cerrar resultado
+        closeResult.addEventListener('click', () => {
+            resultMessage.style.display = 'none';
+            resetGame();
+        });
+        
+        // Reiniciar juego
+        function resetGame() {
+            clearInterval(timerInterval);
+            bluePoints = 0;
+            blueFouls = 0;
+            redPoints = 0;
+            redFouls = 0;
+            currentRound = 1;
+            timeLeft = 120;
+            isTimerRunning = false;
+            
+            blueScoreDisplay.textContent = bluePoints;
+            redScoreDisplay.textContent = redPoints;
+            blueFoulsDisplay.textContent = blueFouls.toFixed(1);
+            redFoulsDisplay.textContent = redFouls.toFixed(1);
+            roundDisplay.textContent = currentRound;
+            updateTimerDisplay();
+            
+            startBtn.textContent = 'Iniciar Round';
+            startBtn.disabled = false;
+            
+            logContainer.innerHTML = '';
+        }
+        
+        // Inicializar
+        updateTimerDisplay();
+    </script>
+</body>
+</html>
