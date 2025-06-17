@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>50 Cent Style - AutoBeat Generator</title>
+    <style>
+        /* Estilos mantenidos igual */
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background-color: #000;
+            color: #ff0000;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .controls {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #222;
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            max-width: 500px;
+        }
+        
+        button {
+            background-color: #ff0000;
+            border: none;
+            color: black;
+            padding: 15px 32px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #cc0000;
+        }
+        
+        .slider {
+            width: 80%;
+            margin: 10px;
+            accent-color: #ff0000;
+        }
+        
+        #status {
+            color: #ff0000;
+            font-size: 12px;
+            margin-top: 10px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h2>🔥 50 Cent AutoBeat Generator 🔥</h2>
+        <button id="playBtn">Iniciar Beat</button>
+        <button id="stopBtn">Detener</button>
+        <div id="status"></div>
+        <br>
+        <label>BPM: <input type="range" id="bpm" class="slider" min="80" max="110" value="80"></label>
+        <label>Kick: <input type="range" id="kickVolume" class="slider" min="0" max="1" step="0.1" value="1"></label>
+        <label>Snare: <input type="range" id="snareVolume" class="slider" min="0" max="1" step="0.1" value="1"></label>
+        <label>Hi-Hat: <input type="range" id="hihatVolume" class="slider" min="0" max="1" step="0.1" value="0"></label>
+        <label>Bass: <input type="range" id="bass" class="slider" min="0" max="1" step="0.1" value="1"></label>
+        <label>Synth: <input type="range" id="synth" class="slider" min="0" max="1" step="0.01" value="0.50"></label>
+    </div>
+
+    <script>
+        let audioContext;
+        let compressor;
+        let isPlaying = false;
+        let currentStep = 0;
+        let intervalId;
+        let patternGenerationInterval;
+        let currentPattern = [];
+        let snareNoiseBuffer;
+        let bassDistortionCurve;
+
+        async function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                compressor = audioContext.createDynamicsCompressor();
+                compressor.connect(audioContext.destination);
+                
+                // Pre-crear recursos reutilizables
+                snareNoiseBuffer = createNoiseBuffer(0.1);
+                bassDistortionCurve = new Float32Array([0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]);
+            }
+            return audioContext.resume();
+        }
+
+        function createNoiseBuffer(duration) {
+            const buffer = audioContext.createBuffer(1, audioContext.sampleRate * duration, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < data.length; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+            return buffer;
+        }
+
+        function generateRandomPattern() {
+            const basePattern = [
+                { kick: true, hihat: true },
+                { hihat: true },
+                { snare: true, hihat: true },
+                { hihat: true },
+                { kick: true, hihat: true },
+                { hihat: true },
+                { snare: true, hihat: true },
+                { hihat: true }
+            ];
+
+            return basePattern.map(step => ({
+                kick: step.kick && Math.random() < 0.85,
+                snare: step.snare && Math.random() < 0.75,
+                hihat: Math.random() < 0.9
+            }));
+        }
+
+        const createPunchyKick = () => {
+            const now = audioContext.currentTime;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.exponentialRampToValueAtTime(50, now + 0.3);
+            
+            gain.gain.setValueAtTime(document.getElementById('kickVolume').value, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+            
+            osc.connect(gain).connect(compressor);
+            osc.start(now);
+            osc.stop(now + 0.4);
+            
+            osc.onended = () => {
+                osc.disconnect();
+                gain.disconnect();
+            };
+        };
+
+        const createSnappySnare = () => {
+            const now = audioContext.currentTime;
+            const noise = audioContext.createBufferSource();
+            const filter = audioContext.createBiquadFilter();
+            const gain = audioContext.createGain();
+            
+            noise.buffer = snareNoiseBuffer;
+            filter.type = 'bandpass';
+            filter.frequency.value = 2000;
+            
+            gain.gain.setValueAtTime(0.8 * document.getElementById('snareVolume').value, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            
+            noise.connect(filter).connect(gain).connect(compressor);
+            noise.start(now);
+            noise.stop(now + 0.15);
+            
+            noise.onended = () => {
+                noise.disconnect();
+                filter.disconnect();
+                gain.disconnect();
+            };
+        };
+
+        const createSharpHiHat = () => {
+            const now = audioContext.currentTime;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.type = 'square';
+            osc.frequency.value = 6000 + Math.random() * 2000;
+            
+            gain.gain.setValueAtTime(0.3 * document.getElementById('hihatVolume').value, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+            
+            osc.connect(gain).connect(compressor);
+            osc.start(now);
+            osc.stop(now + 0.05);
+            
+            osc.onended = () => {
+                osc.disconnect();
+                gain.disconnect();
+            };
+        };
+
+        const createBass = (note) => {
+            const now = audioContext.currentTime;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            const distortion = audioContext.createWaveShaper();
+            
+            osc.type = 'sine';
+            osc.frequency.value = note;
+            distortion.curve = bassDistortionCurve;
+            
+            gain.gain.setValueAtTime(document.getElementById('bass').value, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            
+            osc.connect(distortion).connect(gain).connect(compressor);
+            osc.start(now);
+            osc.stop(now + 0.3);
+            
+            osc.onended = () => {
+                osc.disconnect();
+                distortion.disconnect();
+                gain.disconnect();
+            };
+        };
+
+        function generateGangstaBeat() {
+            const bpm = parseInt(document.getElementById('bpm').value);
+            const stepDuration = 60 / bpm / 2;
+            
+            currentStep = 0;
+            currentPattern = generateRandomPattern();
+            
+            if (intervalId) clearInterval(intervalId);
+            
+            intervalId = setInterval(() => {
+                if (!isPlaying) return;
+
+                const step = currentPattern[currentStep % 8];
+                const now = audioContext.currentTime;
+
+                if (step.kick && document.getElementById('kickVolume').value > 0) createPunchyKick();
+                if (step.snare && document.getElementById('snareVolume').value > 0) createSnappySnare();
+                if (step.hihat && document.getElementById('hihatVolume').value > 0) createSharpHiHat();
+
+                if (currentStep % 4 === 0) createBass(55);
+                if (currentStep % 8 === 3) createBass(65.41);
+
+                if (Math.random() < document.getElementById('synth').value) {
+                    const synth = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    const types = ['square', 'sawtooth', 'triangle'];
+                    
+                    synth.type = types[Math.floor(Math.random() * 3)];
+                    synth.frequency.value = 110 * (Math.floor(Math.random() * 4) + 1);
+                    
+                    gain.gain.value = document.getElementById('synth').value * 0.5;
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    
+                    synth.connect(gain).connect(compressor);
+                    synth.start(now);
+                    synth.stop(now + 0.4);
+                    
+                    synth.onended = () => {
+                        synth.disconnect();
+                        gain.disconnect();
+                    };
+                }
+
+                currentStep++;
+            }, stepDuration * 1000);
+        }
+
+        function updateStatus(message) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            setTimeout(() => status.textContent = '', 2000);
+        }
+
+        function startAutoGeneration() {
+            patternGenerationInterval = setInterval(() => {
+                currentPattern = generateRandomPattern();
+                updateStatus('🔥 Nuevo patrón generado!');
+            }, 600000);
+        }
+
+        document.getElementById('playBtn').addEventListener('click', async () => {
+            if (!isPlaying) {
+                await initAudioContext();
+                isPlaying = true;
+                startAutoGeneration();
+                generateGangstaBeat();
+                updateStatus('🎶 Beat iniciado!');
+            }
+        });
+
+        document.getElementById('stopBtn').addEventListener('click', () => {
+            isPlaying = false;
+            currentStep = 0;
+            clearInterval(intervalId);
+            clearInterval(patternGenerationInterval);
+            updateStatus('⏹ Beat detenido');
+        });
+
+        currentPattern = generateRandomPattern();
+    </script>
+</body>
+COPYRIGHT
+</html>
