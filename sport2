@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combate App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #001510);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Pantalla de Login */
+        .login-screen {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo i {
+            font-size: 5rem;
+            color: #ff5722;
+            margin-bottom: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 75, 43, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Pantalla principal del combate */
+        .combat-screen {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff5722;
+        }
+        
+        .header h2 {
+            color: #ff5722;
+            font-size: 1.8rem;
+        }
+        
+        .round-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .round-type {
+            background: rgba(255, 87, 34, 0.2);
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .round-type.active {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            box-shadow: 0 0 15px rgba(255, 75, 43, 0.5);
+        }
+        
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .timer {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 30px rgba(178, 31, 31, 0.7);
+            position: relative;
+            border: 5px solid #ff5722;
+        }
+        
+        #timer-display {
+            font-size: 3.5rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+        
+        .timer-label {
+            position: absolute;
+            bottom: 20px;
+            font-size: 1.2rem;
+            color: #ffcc00;
+        }
+        
+        .start-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 176, 155, 0.7);
+        }
+        
+        .combat-area {
+            display: flex;
+            flex: 1;
+        }
+        
+        .competitor {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .red-side {
+            background: linear-gradient(to bottom, #8E0E00, #1F1C18);
+            border-right: 3px solid #ff5722;
+        }
+        
+        .blue-side {
+            background: linear-gradient(to bottom, #0c2461, #1e3799);
+            border-left: 3px solid #4fc3f7;
+        }
+        
+        .competitor-name {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        .red-side .competitor-name {
+            background: rgba(142, 14, 0, 0.5);
+            color: #ffcc00;
+        }
+        
+        .blue-side .competitor-name {
+            background: rgba(12, 36, 97, 0.5);
+            color: #4fc3f7;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 6rem;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        .fouls-display {
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .point-btn {
+            padding: 15px 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .point-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .point-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .red-side .point-btn {
+            background: linear-gradient(to bottom, #ff416c, #ff4b2b);
+            color: white;
+        }
+        
+        .blue-side .point-btn {
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            color: white;
+        }
+        
+        .foul-btn {
+            padding: 12px 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to bottom, #434343, #000000);
+            color: white;
+        }
+        
+        .foul-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(to bottom, #ff416c, #ff4b2b);
+        }
+        
+        .foul-warning {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            z-index: 100;
+            display: none;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .combat-area {
+                flex-direction: column;
+            }
+            
+            .red-side {
+                border-right: none;
+                border-bottom: 3px solid #ff5722;
+            }
+            
+            .blue-side {
+                border-left: none;
+                border-top: 3px solid #4fc3f7;
+            }
+            
+            .score-display {
+                font-size: 4rem;
+            }
+            
+            .controls {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            #timer-display {
+                font-size: 2.5rem;
+            }
+            
+            .timer {
+                width: 150px;
+                height: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .round-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .point-btn {
+                padding: 12px 8px;
+                font-size: 1.2rem;
+            }
+            
+            .competitor-name {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Pantalla de Login -->
+        <div class="login-screen" id="loginScreen">
+            <div class="logo">
+                <i class="fas fa-fist-raised"></i>
+                <h1>Combate App</h1>
+            </div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="Usuario" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Contraseña" required>
+                </div>
+                
+                <button type="submit" class="btn">Iniciar Sesión</button>
+            </form>
+        </div>
+        
+        <!-- Pantalla principal del combate -->
+        <div class="combat-screen" id="combatScreen">
+            <div class="header">
+                <h2>Sistema de Combate</h2>
+                <div class="round-controls">
+                    <div class="round-type active" data-time="120">Round (2:00)</div>
+                    <div class="round-type" data-time="150">Final (2:30)</div>
+                </div>
+            </div>
+            
+            <div class="timer-container">
+                <div class="timer">
+                    <div id="timer-display">02:00</div>
+                    <div class="timer-label">TIEMPO</div>
+                </div>
+            </div>
+            
+            <button class="start-btn" id="startBtn">Iniciar Round</button>
+            
+            <div class="combat-area">
+                <!-- Competidor Rojo (Hung) -->
+                <div class="competitor red-side">
+                    <div class="competitor-name">HUNG</div>
+                    <div class="score-display" id="redScore">0</div>
+                    <div class="fouls-display">Faltas: <span id="redFouls">0</span></div>
+                    
+                    <div class="controls">
+                        <button class="point-btn" data-points="1">+1</button>
+                        <button class="point-btn" data-points="2">+2</button>
+                        <button class="point-btn" data-points="3">+3</button>
+                        <button class="foul-btn" data-points="-1">-1 Falta</button>
+                        <button class="foul-btn" data-points="-0.5">-0.5 Falta</button>
+                    </div>
+                    
+                    <div class="foul-warning" id="redWarning">¡3 FALTAS! PERDEDOR</div>
+                </div>
+                
+                <!-- Competidor Azul (Chung) -->
+                <div class="competitor blue-side">
+                    <div class="competitor-name">CHUNG</div>
+                    <div class="score-display" id="blueScore">0</div>
+                    <div class="fouls-display">Faltas: <span id="blueFouls">0</span></div>
+                    
+                    <div class="controls">
+                        <button class="point-btn" data-points="1">+1</button>
+                        <button class="point-btn" data-points="2">+2</button>
+                        <button class="point-btn" data-points="3">+3</button>
+                        <button class="foul-btn" data-points="-1">-1 Falta</button>
+                        <button class="foul-btn" data-points="-0.5">-0.5 Falta</button>
+                    </div>
+                    
+                    <div class="foul-warning" id="blueWarning">¡3 FALTAS! PERDEDOR</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let timer;
+        let timeLeft = 120; // 2 minutos en segundos
+        let isRunning = false;
+        let redScore = 0;
+        let blueScore = 0;
+        let redFouls = 0;
+        let blueFouls = 0;
+        
+        // Elementos DOM
+        const loginScreen = document.getElementById('loginScreen');
+        const combatScreen = document.getElementById('combatScreen');
+        const loginForm = document.getElementById('loginForm');
+        const timerDisplay = document.getElementById('timer-display');
+        const startBtn = document.getElementById('startBtn');
+        const roundTypes = document.querySelectorAll('.round-type');
+        const redScoreDisplay = document.getElementById('redScore');
+        const blueScoreDisplay = document.getElementById('blueScore');
+        const redFoulsDisplay = document.getElementById('redFouls');
+        const blueFoulsDisplay = document.getElementById('blueFouls');
+        const redWarning = document.getElementById('redWarning');
+        const blueWarning = document.getElementById('blueWarning');
+        
+        // Iniciar sesión
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simular inicio de sesión exitoso
+            loginScreen.style.display = 'none';
+            combatScreen.style.display = 'flex';
+        });
+        
+        // Cambiar tipo de round
+        roundTypes.forEach(type => {
+            type.addEventListener('click', function() {
+                roundTypes.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                timeLeft = parseInt(this.dataset.time);
+                updateTimerDisplay();
+                
+                // Resetear el temporizador
+                if (isRunning) {
+                    clearInterval(timer);
+                    startTimer();
+                }
+            });
+        });
+        
+        // Iniciar/detener temporizador
+        startBtn.addEventListener('click', function() {
+            if (!isRunning) {
+                startTimer();
+                startBtn.textContent = 'Detener Round';
+            } else {
+                clearInterval(timer);
+                isRunning = false;
+                startBtn.textContent = 'Reiniciar Round';
+            }
+        });
+        
+        function startTimer() {
+            isRunning = true;
+            timer = setInterval(function() {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    isRunning = false;
+                    startBtn.textContent = 'Iniciar Round';
+                    alert('¡Round terminado!');
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Manejar puntuación y faltas
+        document.querySelectorAll('.red-side .point-btn, .red-side .foul-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const points = parseFloat(this.dataset.points);
+                
+                if (points < 0) {
+                    // Es una falta
+                    redFouls += Math.abs(points);
+                    redFoulsDisplay.textContent = redFouls.toFixed(1);
+                    
+                    // Verificar si alcanza 3 faltas
+                    if (redFouls >= 3) {
+                        redWarning.style.display = 'block';
+                    }
+                }
+                
+                redScore += points;
+                redScoreDisplay.textContent = redScore;
+            });
+        });
+        
+        document.querySelectorAll('.blue-side .point-btn, .blue-side .foul-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const points = parseFloat(this.dataset.points);
+                
+                if (points < 0) {
+                    // Es una falta
+                    blueFouls += Math.abs(points);
+                    blueFoulsDisplay.textContent = blueFouls.toFixed(1);
+                    
+                    // Verificar si alcanza 3 faltas
+                    if (blueFouls >= 3) {
+                        blueWarning.style.display = 'block';
+                    }
+                }
+                
+                blueScore += points;
+                blueScoreDisplay.textContent = blueScore;
+            });
+        });
+        
+        // Inicializar
+        updateTimerDisplay();
+    </script>
+</body>
+</html>
