@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,17 +26,25 @@
         
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             background-color: rgba(0, 0, 0, 0.8);
             border-radius: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            max-height: 800px;
         }
         
         /* Pantalla de Login */
         .login-screen {
             padding: 40px;
             text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .logo {
@@ -112,8 +121,9 @@
         /* Pantalla de Combate */
         .fight-screen {
             display: none;
-            height: 100%;
+            flex: 1;
             flex-direction: column;
+            height: 100%;
         }
         
         .header {
@@ -139,34 +149,30 @@
             object-fit: cover;
         }
         
-        .timer-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 10px 0;
-        }
-        
         .round-info {
             font-size: 18px;
             margin-bottom: 5px;
             color: #ffcc00;
+            text-align: center;
         }
         
         .timer {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: bold;
             font-family: 'Courier New', monospace;
             color: #ffcc00;
             background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 30px;
+            padding: 10px 25px;
             border-radius: 10px;
             border: 2px solid #ff6600;
+            min-width: 130px;
         }
         
         .timer-controls {
             display: flex;
             gap: 10px;
             margin-top: 10px;
+            justify-content: center;
         }
         
         .btn-control {
@@ -197,9 +203,10 @@
             color: white;
         }
         
-        .competitors {
+        .competitors-container {
             display: flex;
             flex: 1;
+            position: relative;
         }
         
         .competitor {
@@ -326,6 +333,22 @@
             font-weight: bold;
         }
         
+        /* Contenedor del temporizador inferior */
+        .bottom-timer-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 25px;
+            border-radius: 15px;
+            border: 2px solid #ffcc00;
+        }
+        
         /* Modal */
         .modal {
             display: none;
@@ -424,12 +447,12 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            .competitors {
+            .competitors-container {
                 flex-direction: column;
             }
             
             .timer {
-                font-size: 36px;
+                font-size: 28px;
             }
             
             .points {
@@ -439,6 +462,11 @@
             .header {
                 flex-direction: column;
                 align-items: center;
+            }
+            
+            .bottom-timer-container {
+                bottom: 10px;
+                padding: 8px 15px;
             }
         }
         
@@ -467,6 +495,7 @@
             .timer {
                 font-size: 24px;
                 padding: 5px 15px;
+                min-width: 100px;
             }
             
             .footer {
@@ -518,6 +547,15 @@
             color: #4CAF50;
             text-shadow: 0 0 20px rgba(76, 175, 80, 0.8);
         }
+        
+        .combat-title {
+            text-align: center;
+            padding: 15px 0;
+            font-size: 28px;
+            color: #ffcc00;
+            background: rgba(0,0,0,0.7);
+            border-bottom: 2px solid #ff6600;
+        }
     </style>
 </head>
 <body>
@@ -543,24 +581,17 @@
         
         <!-- Pantalla de Combate -->
         <div class="fight-screen" id="fightScreen">
+            <div class="combat-title">Combate Chung vs Hung</div>
+            
             <div class="header">
                 <div class="user-info">
                     <img src="https://ui-avatars.com/api/?name=Usuario" alt="Usuario">
                     <span id="userDisplay">Usuario</span>
                 </div>
-                <div class="timer-container">
-                    <div class="round-info">Round <span id="currentRound">1</span>/<span id="totalRounds">2</span></div>
-                    <div class="timer" id="timer">02:00</div>
-                    <div class="timer-controls">
-                        <button class="btn-control btn-start" id="startTimer"><i class="fas fa-play"></i></button>
-                        <button class="btn-control btn-pause" id="pauseTimer"><i class="fas fa-pause"></i></button>
-                        <button class="btn-control btn-reset" id="resetTimer"><i class="fas fa-redo"></i></button>
-                        <button class="btn-control btn-settings" id="openSettings"><i class="fas fa-cog"></i></button>
-                    </div>
-                </div>
+                <div class="round-info">Round <span id="currentRound">1</span>/<span id="totalRounds">2</span></div>
             </div>
             
-            <div class="competitors">
+            <div class="competitors-container">
                 <!-- Competidor Hung (rojo) -->
                 <div class="competitor hung" id="hungCompetitor">
                     <div class="winner" id="hungWinner">
@@ -614,6 +645,17 @@
                         <button class="btn-point plus" data-competitor="chung" data-points="3">+3</button>
                         <button class="btn-point minus" data-competitor="chung" data-points="-1">Falta -1</button>
                         <button class="btn-point minus" data-competitor="chung" data-points="-0.5">Falta -0.5</button>
+                    </div>
+                </div>
+                
+                <!-- Temporizador en la parte inferior central -->
+                <div class="bottom-timer-container">
+                    <div class="timer" id="timer">02:00</div>
+                    <div class="timer-controls">
+                        <button class="btn-control btn-start" id="startTimer"><i class="fas fa-play"></i></button>
+                        <button class="btn-control btn-pause" id="pauseTimer"><i class="fas fa-pause"></i></button>
+                        <button class="btn-control btn-reset" id="resetTimer"><i class="fas fa-redo"></i></button>
+                        <button class="btn-control btn-settings" id="openSettings"><i class="fas fa-cog"></i></button>
                     </div>
                 </div>
             </div>
