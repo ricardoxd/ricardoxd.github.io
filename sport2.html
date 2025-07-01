@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -123,12 +122,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .user-info {
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 10px;
         }
         
         .user-info img {
@@ -311,6 +312,7 @@
             display: flex;
             justify-content: center;
             gap: 20px;
+            flex-wrap: wrap;
         }
         
         .btn-footer {
@@ -370,8 +372,14 @@
             cursor: pointer;
         }
         
-        .settings-group {
+        .time-settings {
+            display: flex;
+            gap: 15px;
             margin-bottom: 20px;
+        }
+        
+        .time-group {
+            flex: 1;
         }
         
         .settings-label {
@@ -387,6 +395,11 @@
             border: none;
             background-color: rgba(255, 255, 255, 0.9);
             font-size: 16px;
+        }
+        
+        .settings-input.time-input {
+            padding: 12px;
+            text-align: center;
         }
         
         .device-list {
@@ -422,6 +435,11 @@
             .points {
                 font-size: 48px;
             }
+            
+            .header {
+                flex-direction: column;
+                align-items: center;
+            }
         }
         
         @media (max-width: 480px) {
@@ -449,6 +467,15 @@
             .timer {
                 font-size: 24px;
                 padding: 5px 15px;
+            }
+            
+            .footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn-footer {
+                width: 100%;
             }
         }
         
@@ -606,9 +633,15 @@
                 <button class="close-modal" id="closeSettings">&times;</button>
             </div>
             
-            <div class="settings-group">
-                <label class="settings-label">Tiempo por Round (minutos)</label>
-                <input type="number" class="settings-input" id="roundTime" min="1" max="10" value="2">
+            <div class="time-settings">
+                <div class="time-group">
+                    <label class="settings-label">Minutos por Round</label>
+                    <input type="number" class="settings-input time-input" id="roundMinutes" min="0" max="10" value="2">
+                </div>
+                <div class="time-group">
+                    <label class="settings-label">Segundos por Round</label>
+                    <input type="number" class="settings-input time-input" id="roundSeconds" min="0" max="59" value="0">
+                </div>
             </div>
             
             <div class="settings-group">
@@ -664,7 +697,8 @@
         const closeSettingsBtn = document.getElementById('closeSettings');
         const saveSettingsBtn = document.getElementById('saveSettings');
         const settingsModal = document.getElementById('settingsModal');
-        const roundTimeInput = document.getElementById('roundTime');
+        const roundMinutesInput = document.getElementById('roundMinutes');
+        const roundSecondsInput = document.getElementById('roundSeconds');
         const totalRoundsInput = document.getElementById('totalRoundsInput');
         const resetFightBtn = document.getElementById('resetFight');
         const connectDeviceBtn = document.getElementById('connectDevice');
@@ -755,7 +789,9 @@
         // Reiniciar temporizador
         function resetTimer() {
             pauseTimer();
-            timeLeft = roundTimeInput.value * 60;
+            const minutes = parseInt(roundMinutesInput.value) || 0;
+            const seconds = parseInt(roundSecondsInput.value) || 0;
+            timeLeft = minutes * 60 + seconds;
             updateTimerDisplay();
         }
         
@@ -766,8 +802,7 @@
             
             if (currentRound <= totalRounds) {
                 currentRoundElement.textContent = currentRound;
-                timeLeft = roundTimeInput.value * 60;
-                updateTimerDisplay();
+                resetTimer();
                 alert(`¡Round ${currentRound - 1} completado! Preparados para el siguiente round.`);
             } else {
                 alert('¡Combate completado!');
@@ -788,8 +823,18 @@
         
         // Guardar configuración
         function saveSettings() {
+            const minutes = parseInt(roundMinutesInput.value) || 0;
+            const seconds = parseInt(roundSecondsInput.value) || 0;
             totalRounds = parseInt(totalRoundsInput.value);
-            timeLeft = parseInt(roundTimeInput.value) * 60;
+            timeLeft = minutes * 60 + seconds;
+            
+            // Validar que el tiempo sea válido
+            if (timeLeft <= 0) {
+                alert("El tiempo por round debe ser mayor a cero");
+                timeLeft = 120; // Valor por defecto
+                roundMinutesInput.value = 2;
+                roundSecondsInput.value = 0;
+            }
             
             totalRoundsElement.textContent = totalRounds;
             updateTimerDisplay();
@@ -811,8 +856,7 @@
             currentRoundElement.textContent = currentRound;
             
             // Reiniciar timer
-            timeLeft = roundTimeInput.value * 60;
-            updateTimerDisplay();
+            resetTimer();
             
             // Actualizar displays
             hungPointsElement.textContent = hungPoints;
@@ -831,7 +875,16 @@
         
         // Conectar dispositivo (simulado)
         function connectDevice() {
-            alert('Buscando dispositivos...\n\nEn una implementación real, esto permitiría conectar otros dispositivos para controlar la aplicación.');
+            const deviceName = prompt("Ingrese el nombre del dispositivo:");
+            if (deviceName) {
+                const deviceList = document.getElementById('deviceList');
+                const newDevice = document.createElement('div');
+                newDevice.className = 'device-item';
+                newDevice.innerHTML = `<i class="fas fa-mobile-alt"></i> ${deviceName} (Conectado)`;
+                deviceList.appendChild(newDevice);
+                
+                alert(`Dispositivo "${deviceName}" conectado con éxito!`);
+            }
         }
         
         // Manejar botones de puntos
@@ -846,7 +899,7 @@
                 } else {
                     hungPoints += points;
                 }
-                hungPointsElement.textContent = hungPoints;
+                hungPointsElement.textContent = hungPoints.toFixed(1);
             } else {
                 if (points < 0) {
                     chungFouls += Math.abs(points);
@@ -854,7 +907,7 @@
                 } else {
                     chungPoints += points;
                 }
-                chungPointsElement.textContent = chungPoints;
+                chungPointsElement.textContent = chungPoints.toFixed(1);
             }
             
             updateFoulsDisplay();
@@ -865,7 +918,7 @@
         function updateFoulsDisplay() {
             // Hung
             hungFoulElements.forEach((foul, index) => {
-                if (hungFouls >= (index + 1)) {
+                if (hungFouls > index) {
                     foul.classList.add('active');
                 } else {
                     foul.classList.remove('active');
@@ -874,7 +927,7 @@
             
             // Chung
             chungFoulElements.forEach((foul, index) => {
-                if (chungFouls >= (index + 1)) {
+                if (chungFouls > index) {
                     foul.classList.add('active');
                 } else {
                     foul.classList.remove('active');
