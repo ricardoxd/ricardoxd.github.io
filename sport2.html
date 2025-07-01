@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Combate App</title>
+    <title>Combate Chung vs Hung</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,59 +15,50 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #001510);
-            color: white;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            color: white;
         }
         
         .container {
             width: 100%;
-            max-width: 1200px;
-            background: rgba(0, 0, 0, 0.8);
+            max-width: 900px;
+            background-color: rgba(0, 0, 0, 0.8);
             border-radius: 20px;
-            overflow: hidden;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
         
         /* Pantalla de Login */
         .login-screen {
             padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
+            text-align: center;
         }
         
         .logo {
-            text-align: center;
+            font-size: 48px;
             margin-bottom: 20px;
+            color: #ffcc00;
         }
         
-        .logo i {
-            font-size: 5rem;
-            color: #ff5722;
-            margin-bottom: 15px;
-        }
-        
-        .logo h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .app-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #fff;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
         }
         
         .login-form {
-            width: 100%;
-            max-width: 400px;
             display: flex;
             flex-direction: column;
             gap: 20px;
+            max-width: 400px;
+            margin: 0 auto;
         }
         
         .input-group {
@@ -78,33 +70,29 @@
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: #777;
+            color: #999;
         }
         
-        .input-group input {
+        input {
             width: 100%;
-            padding: 15px 15px 15px 45px;
+            padding: 15px 15px 15px 50px;
             border: none;
             border-radius: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1.1rem;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.9);
             transition: all 0.3s;
         }
         
-        .input-group input:focus {
+        input:focus {
             outline: none;
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
         }
         
         .btn {
-            padding: 15px 30px;
+            padding: 15px;
             border: none;
             border-radius: 50px;
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            color: white;
-            font-size: 1.2rem;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
@@ -112,301 +100,396 @@
             letter-spacing: 1px;
         }
         
-        .btn:hover {
+        .btn-login {
+            background: linear-gradient(to right, #ffcc00, #ff6600);
+            color: #000;
+        }
+        
+        .btn-login:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255, 75, 43, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
         }
         
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        /* Pantalla principal del combate */
-        .combat-screen {
+        /* Pantalla de Combate */
+        .fight-screen {
             display: none;
+            height: 100%;
             flex-direction: column;
-            height: 100vh;
         }
         
         .header {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #ff5722;
         }
         
-        .header h2 {
-            color: #ff5722;
-            font-size: 1.8rem;
-        }
-        
-        .round-controls {
+        .user-info {
             display: flex;
-            gap: 15px;
             align-items: center;
+            gap: 10px;
         }
         
-        .round-type {
-            background: rgba(255, 87, 34, 0.2);
-            border-radius: 30px;
-            padding: 8px 20px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .round-type.active {
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            box-shadow: 0 0 15px rgba(255, 75, 43, 0.5);
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
         }
         
         .timer-container {
             display: flex;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.5);
-        }
-        
-        .timer {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            box-shadow: 0 0 30px rgba(178, 31, 31, 0.7);
-            position: relative;
-            border: 5px solid #ff5722;
+            margin: 10px 0;
         }
         
-        #timer-display {
-            font-size: 3.5rem;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-        }
-        
-        .timer-label {
-            position: absolute;
-            bottom: 20px;
-            font-size: 1.2rem;
+        .round-info {
+            font-size: 18px;
+            margin-bottom: 5px;
             color: #ffcc00;
         }
         
-        .start-btn {
-            margin-top: 20px;
-            padding: 12px 30px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            background: linear-gradient(to right, #00b09b, #96c93d);
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
+        .timer {
+            font-size: 48px;
             font-weight: bold;
+            font-family: 'Courier New', monospace;
+            color: #ffcc00;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 30px;
+            border-radius: 10px;
+            border: 2px solid #ff6600;
         }
         
-        .start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 176, 155, 0.7);
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
         }
         
-        .combat-area {
+        .btn-control {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .btn-start {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .btn-pause {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .btn-reset {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .btn-settings {
+            background-color: #9C27B0;
+            color: white;
+        }
+        
+        .competitors {
             display: flex;
             flex: 1;
         }
         
         .competitor {
             flex: 1;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            align-items: center;
             position: relative;
+            transition: all 0.3s;
         }
         
-        .red-side {
-            background: linear-gradient(to bottom, #8E0E00, #1F1C18);
-            border-right: 3px solid #ff5722;
+        .competitor.highlight {
+            box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.5);
         }
         
-        .blue-side {
-            background: linear-gradient(to bottom, #0c2461, #1e3799);
-            border-left: 3px solid #4fc3f7;
+        .competitor.hung {
+            background: linear-gradient(to bottom, #b21f1f, #8b0000);
+        }
+        
+        .competitor.chung {
+            background: linear-gradient(to bottom, #1a2a6c, #00008b);
         }
         
         .competitor-name {
-            text-align: center;
-            font-size: 2.5rem;
+            font-size: 32px;
             font-weight: bold;
-            margin-bottom: 30px;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 10px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         
-        .red-side .competitor-name {
-            background: rgba(142, 14, 0, 0.5);
+        .points-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            width: 100%;
+        }
+        
+        .points-label {
+            font-size: 18px;
+            margin-bottom: 10px;
             color: #ffcc00;
         }
         
-        .blue-side .competitor-name {
-            background: rgba(12, 36, 97, 0.5);
-            color: #4fc3f7;
-        }
-        
-        .score-display {
-            text-align: center;
-            font-size: 6rem;
+        .points {
+            font-size: 64px;
             font-weight: bold;
-            margin: 20px 0;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            font-family: 'Courier New', monospace;
         }
         
-        .fouls-display {
-            text-align: center;
-            font-size: 1.5rem;
-            margin: 15px 0;
-            padding: 10px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.3);
+        .fouls-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
         
-        .controls {
+        .foul {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 1px solid #ccc;
+        }
+        
+        .foul.active {
+            background-color: #ffcc00;
+        }
+        
+        .buttons-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 20px;
+            gap: 10px;
+            width: 100%;
+            margin-top: auto;
         }
         
-        .point-btn {
-            padding: 15px 10px;
+        .btn-point {
+            padding: 15px;
             border: none;
             border-radius: 10px;
-            font-size: 1.5rem;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.9);
         }
         
-        .point-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        .btn-point:hover {
+            transform: scale(1.05);
         }
         
-        .point-btn:active {
-            transform: translateY(1px);
-        }
-        
-        .red-side .point-btn {
-            background: linear-gradient(to bottom, #ff416c, #ff4b2b);
+        .btn-point.plus {
+            background-color: #4CAF50;
             color: white;
         }
         
-        .blue-side .point-btn {
-            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+        .btn-point.minus {
+            background-color: #f44336;
             color: white;
         }
         
-        .foul-btn {
-            padding: 12px 10px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(to bottom, #434343, #000000);
-            color: white;
-        }
-        
-        .foul-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            background: linear-gradient(to bottom, #ff416c, #ff4b2b);
-        }
-        
-        .foul-warning {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            font-size: 2.5rem;
-            font-weight: bold;
+        .footer {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 15px;
             text-align: center;
-            z-index: 100;
-            display: none;
-            animation: pulse 1s infinite;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
         
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+        .btn-footer {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            background: linear-gradient(to right, #ffcc00, #ff6600);
+            color: #000;
+            font-weight: bold;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a2a6c, #000);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffcc00;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ffcc00;
+            padding-bottom: 10px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            color: #ffcc00;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .settings-group {
+            margin-bottom: 20px;
+        }
+        
+        .settings-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffcc00;
+        }
+        
+        .settings-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+        }
+        
+        .device-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .device-item {
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .device-item i {
+            margin-right: 10px;
+            color: #ffcc00;
         }
         
         /* Responsive */
         @media (max-width: 768px) {
-            .combat-area {
+            .competitors {
                 flex-direction: column;
             }
             
-            .red-side {
-                border-right: none;
-                border-bottom: 3px solid #ff5722;
-            }
-            
-            .blue-side {
-                border-left: none;
-                border-top: 3px solid #4fc3f7;
-            }
-            
-            .score-display {
-                font-size: 4rem;
-            }
-            
-            .controls {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            #timer-display {
-                font-size: 2.5rem;
-            }
-            
             .timer {
-                width: 150px;
-                height: 150px;
+                font-size: 36px;
+            }
+            
+            .points {
+                font-size: 48px;
             }
         }
         
         @media (max-width: 480px) {
-            .header {
-                flex-direction: column;
-                gap: 10px;
+            .login-screen {
+                padding: 20px;
             }
             
-            .round-controls {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .point-btn {
-                padding: 12px 8px;
-                font-size: 1.2rem;
+            .app-title {
+                font-size: 24px;
             }
             
             .competitor-name {
-                font-size: 2rem;
+                font-size: 24px;
             }
+            
+            .points {
+                font-size: 36px;
+            }
+            
+            .btn-point {
+                padding: 10px;
+                font-size: 16px;
+            }
+            
+            .timer {
+                font-size: 24px;
+                padding: 5px 15px;
+            }
+        }
+        
+        /* Animaciones */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+        
+        .winner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 10;
+        }
+        
+        .winner-text {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        .winner-name {
+            font-size: 64px;
+            color: #4CAF50;
+            text-shadow: 0 0 20px rgba(76, 175, 80, 0.8);
         }
     </style>
 </head>
@@ -416,206 +499,411 @@
         <div class="login-screen" id="loginScreen">
             <div class="logo">
                 <i class="fas fa-fist-raised"></i>
-                <h1>Combate App</h1>
             </div>
-            
+            <h1 class="app-title">Sistema de Combate</h1>
             <form class="login-form" id="loginForm">
                 <div class="input-group">
                     <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Usuario" required>
+                    <input type="text" id="username" placeholder="Usuario" required>
                 </div>
-                
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Contraseña" required>
+                    <input type="password" id="password" placeholder="Contraseña" required>
                 </div>
-                
-                <button type="submit" class="btn">Iniciar Sesión</button>
+                <button type="submit" class="btn btn-login">Iniciar Sesión</button>
             </form>
         </div>
         
-        <!-- Pantalla principal del combate -->
-        <div class="combat-screen" id="combatScreen">
+        <!-- Pantalla de Combate -->
+        <div class="fight-screen" id="fightScreen">
             <div class="header">
-                <h2>Sistema de Combate</h2>
-                <div class="round-controls">
-                    <div class="round-type active" data-time="120">Round (2:00)</div>
-                    <div class="round-type" data-time="150">Final (2:30)</div>
+                <div class="user-info">
+                    <img src="https://ui-avatars.com/api/?name=Usuario" alt="Usuario">
+                    <span id="userDisplay">Usuario</span>
+                </div>
+                <div class="timer-container">
+                    <div class="round-info">Round <span id="currentRound">1</span>/<span id="totalRounds">2</span></div>
+                    <div class="timer" id="timer">02:00</div>
+                    <div class="timer-controls">
+                        <button class="btn-control btn-start" id="startTimer"><i class="fas fa-play"></i></button>
+                        <button class="btn-control btn-pause" id="pauseTimer"><i class="fas fa-pause"></i></button>
+                        <button class="btn-control btn-reset" id="resetTimer"><i class="fas fa-redo"></i></button>
+                        <button class="btn-control btn-settings" id="openSettings"><i class="fas fa-cog"></i></button>
+                    </div>
                 </div>
             </div>
             
-            <div class="timer-container">
-                <div class="timer">
-                    <div id="timer-display">02:00</div>
-                    <div class="timer-label">TIEMPO</div>
-                </div>
-            </div>
-            
-            <button class="start-btn" id="startBtn">Iniciar Round</button>
-            
-            <div class="combat-area">
-                <!-- Competidor Rojo (Hung) -->
-                <div class="competitor red-side">
-                    <div class="competitor-name">HUNG</div>
-                    <div class="score-display" id="redScore">0</div>
-                    <div class="fouls-display">Faltas: <span id="redFouls">0</span></div>
+            <div class="competitors">
+                <!-- Competidor Hung (rojo) -->
+                <div class="competitor hung" id="hungCompetitor">
+                    <div class="winner" id="hungWinner">
+                        <div class="winner-text">¡Vencedor!</div>
+                        <div class="winner-name">HUNG</div>
+                    </div>
+                    <h2 class="competitor-name">HUNG</h2>
                     
-                    <div class="controls">
-                        <button class="point-btn" data-points="1">+1</button>
-                        <button class="point-btn" data-points="2">+2</button>
-                        <button class="point-btn" data-points="3">+3</button>
-                        <button class="foul-btn" data-points="-1">-1 Falta</button>
-                        <button class="foul-btn" data-points="-0.5">-0.5 Falta</button>
+                    <div class="points-container">
+                        <div class="points-label">Puntos</div>
+                        <div class="points" id="hungPoints">0</div>
                     </div>
                     
-                    <div class="foul-warning" id="redWarning">¡3 FALTAS! PERDEDOR</div>
+                    <div class="fouls-container">
+                        <div class="foul" id="hungFoul1"></div>
+                        <div class="foul" id="hungFoul2"></div>
+                        <div class="foul" id="hungFoul3"></div>
+                    </div>
+                    
+                    <div class="buttons-container">
+                        <button class="btn-point plus" data-competitor="hung" data-points="1">+1</button>
+                        <button class="btn-point plus" data-competitor="hung" data-points="2">+2</button>
+                        <button class="btn-point plus" data-competitor="hung" data-points="3">+3</button>
+                        <button class="btn-point minus" data-competitor="hung" data-points="-1">Falta -1</button>
+                        <button class="btn-point minus" data-competitor="hung" data-points="-0.5">Falta -0.5</button>
+                    </div>
                 </div>
                 
-                <!-- Competidor Azul (Chung) -->
-                <div class="competitor blue-side">
-                    <div class="competitor-name">CHUNG</div>
-                    <div class="score-display" id="blueScore">0</div>
-                    <div class="fouls-display">Faltas: <span id="blueFouls">0</span></div>
+                <!-- Competidor Chung (azul) -->
+                <div class="competitor chung" id="chungCompetitor">
+                    <div class="winner" id="chungWinner">
+                        <div class="winner-text">¡Vencedor!</div>
+                        <div class="winner-name">CHUNG</div>
+                    </div>
+                    <h2 class="competitor-name">CHUNG</h2>
                     
-                    <div class="controls">
-                        <button class="point-btn" data-points="1">+1</button>
-                        <button class="point-btn" data-points="2">+2</button>
-                        <button class="point-btn" data-points="3">+3</button>
-                        <button class="foul-btn" data-points="-1">-1 Falta</button>
-                        <button class="foul-btn" data-points="-0.5">-0.5 Falta</button>
+                    <div class="points-container">
+                        <div class="points-label">Puntos</div>
+                        <div class="points" id="chungPoints">0</div>
                     </div>
                     
-                    <div class="foul-warning" id="blueWarning">¡3 FALTAS! PERDEDOR</div>
+                    <div class="fouls-container">
+                        <div class="foul" id="chungFoul1"></div>
+                        <div class="foul" id="chungFoul2"></div>
+                        <div class="foul" id="chungFoul3"></div>
+                    </div>
+                    
+                    <div class="buttons-container">
+                        <button class="btn-point plus" data-competitor="chung" data-points="1">+1</button>
+                        <button class="btn-point plus" data-competitor="chung" data-points="2">+2</button>
+                        <button class="btn-point plus" data-competitor="chung" data-points="3">+3</button>
+                        <button class="btn-point minus" data-competitor="chung" data-points="-1">Falta -1</button>
+                        <button class="btn-point minus" data-competitor="chung" data-points="-0.5">Falta -0.5</button>
+                    </div>
                 </div>
             </div>
+            
+            <div class="footer">
+                <button class="btn-footer" id="resetFight"><i class="fas fa-sync"></i> Reiniciar Combate</button>
+                <button class="btn-footer" id="connectDevice"><i class="fas fa-link"></i> Conectar Dispositivo</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Configuración -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Configuración</h2>
+                <button class="close-modal" id="closeSettings">&times;</button>
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Tiempo por Round (minutos)</label>
+                <input type="number" class="settings-input" id="roundTime" min="1" max="10" value="2">
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Número de Rounds</label>
+                <input type="number" class="settings-input" id="totalRoundsInput" min="1" max="5" value="2">
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Dispositivos Conectados</label>
+                <div class="device-list" id="deviceList">
+                    <div class="device-item">
+                        <i class="fas fa-desktop"></i> Este dispositivo (Principal)
+                    </div>
+                    <div class="device-item">
+                        <i class="fas fa-mobile-alt"></i> Móvil de Juan (Conectado)
+                    </div>
+                    <div class="device-item">
+                        <i class="fas fa-tablet-alt"></i> Tablet de María (Conectado)
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-login" id="saveSettings">Guardar Cambios</button>
         </div>
     </div>
 
     <script>
-        // Variables globales
-        let timer;
+        // Variables de estado
+        let isTimerRunning = false;
+        let timerInterval;
         let timeLeft = 120; // 2 minutos en segundos
-        let isRunning = false;
-        let redScore = 0;
-        let blueScore = 0;
-        let redFouls = 0;
-        let blueFouls = 0;
+        let currentRound = 1;
+        let totalRounds = 2;
+        
+        // Puntuaciones
+        let hungPoints = 0;
+        let hungFouls = 0;
+        let chungPoints = 0;
+        let chungFouls = 0;
         
         // Elementos DOM
         const loginScreen = document.getElementById('loginScreen');
-        const combatScreen = document.getElementById('combatScreen');
+        const fightScreen = document.getElementById('fightScreen');
         const loginForm = document.getElementById('loginForm');
-        const timerDisplay = document.getElementById('timer-display');
-        const startBtn = document.getElementById('startBtn');
-        const roundTypes = document.querySelectorAll('.round-type');
-        const redScoreDisplay = document.getElementById('redScore');
-        const blueScoreDisplay = document.getElementById('blueScore');
-        const redFoulsDisplay = document.getElementById('redFouls');
-        const blueFoulsDisplay = document.getElementById('blueFouls');
-        const redWarning = document.getElementById('redWarning');
-        const blueWarning = document.getElementById('blueWarning');
+        const userDisplay = document.getElementById('userDisplay');
+        const timerElement = document.getElementById('timer');
+        const currentRoundElement = document.getElementById('currentRound');
+        const totalRoundsElement = document.getElementById('totalRounds');
+        const startTimerBtn = document.getElementById('startTimer');
+        const pauseTimerBtn = document.getElementById('pauseTimer');
+        const resetTimerBtn = document.getElementById('resetTimer');
+        const openSettingsBtn = document.getElementById('openSettings');
+        const closeSettingsBtn = document.getElementById('closeSettings');
+        const saveSettingsBtn = document.getElementById('saveSettings');
+        const settingsModal = document.getElementById('settingsModal');
+        const roundTimeInput = document.getElementById('roundTime');
+        const totalRoundsInput = document.getElementById('totalRoundsInput');
+        const resetFightBtn = document.getElementById('resetFight');
+        const connectDeviceBtn = document.getElementById('connectDevice');
+        const hungPointsElement = document.getElementById('hungPoints');
+        const chungPointsElement = document.getElementById('chungPoints');
+        const hungFoulElements = [
+            document.getElementById('hungFoul1'),
+            document.getElementById('hungFoul2'),
+            document.getElementById('hungFoul3')
+        ];
+        const chungFoulElements = [
+            document.getElementById('chungFoul1'),
+            document.getElementById('chungFoul2'),
+            document.getElementById('chungFoul3')
+        ];
+        const hungWinner = document.getElementById('hungWinner');
+        const chungWinner = document.getElementById('chungWinner');
+        const hungCompetitor = document.getElementById('hungCompetitor');
+        const chungCompetitor = document.getElementById('chungCompetitor');
         
-        // Iniciar sesión
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Simular inicio de sesión exitoso
-            loginScreen.style.display = 'none';
-            combatScreen.style.display = 'flex';
-        });
-        
-        // Cambiar tipo de round
-        roundTypes.forEach(type => {
-            type.addEventListener('click', function() {
-                roundTypes.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                timeLeft = parseInt(this.dataset.time);
-                updateTimerDisplay();
-                
-                // Resetear el temporizador
-                if (isRunning) {
-                    clearInterval(timer);
-                    startTimer();
-                }
+        // Inicializar la aplicación
+        function initApp() {
+            updateTimerDisplay();
+            updateFoulsDisplay();
+            
+            // Event Listeners
+            loginForm.addEventListener('submit', handleLogin);
+            startTimerBtn.addEventListener('click', startTimer);
+            pauseTimerBtn.addEventListener('click', pauseTimer);
+            resetTimerBtn.addEventListener('click', resetTimer);
+            openSettingsBtn.addEventListener('click', openSettings);
+            closeSettingsBtn.addEventListener('click', closeSettings);
+            saveSettingsBtn.addEventListener('click', saveSettings);
+            resetFightBtn.addEventListener('click', resetFight);
+            connectDeviceBtn.addEventListener('click', connectDevice);
+            
+            // Event delegation para botones de puntos
+            document.querySelectorAll('.btn-point').forEach(button => {
+                button.addEventListener('click', handlePointsButton);
             });
-        });
+        }
         
-        // Iniciar/detener temporizador
-        startBtn.addEventListener('click', function() {
-            if (!isRunning) {
-                startTimer();
-                startBtn.textContent = 'Detener Round';
+        // Manejar inicio de sesión
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            userDisplay.textContent = username;
+            loginScreen.style.display = 'none';
+            fightScreen.style.display = 'flex';
+        }
+        
+        // Actualizar display del temporizador
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Cambiar color cuando quedan 30 segundos o menos
+            if (timeLeft <= 30) {
+                timerElement.classList.add('pulse');
             } else {
-                clearInterval(timer);
-                isRunning = false;
-                startBtn.textContent = 'Reiniciar Round';
+                timerElement.classList.remove('pulse');
             }
-        });
+        }
         
+        // Iniciar temporizador
         function startTimer() {
-            isRunning = true;
-            timer = setInterval(function() {
+            if (isTimerRunning || timeLeft <= 0) return;
+            
+            isTimerRunning = true;
+            timerInterval = setInterval(() => {
                 timeLeft--;
                 updateTimerDisplay();
                 
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    isRunning = false;
-                    startBtn.textContent = 'Iniciar Round';
-                    alert('¡Round terminado!');
+                    pauseTimer();
+                    handleRoundEnd();
                 }
             }, 1000);
         }
         
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        // Pausar temporizador
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
         }
         
-        // Manejar puntuación y faltas
-        document.querySelectorAll('.red-side .point-btn, .red-side .foul-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const points = parseFloat(this.dataset.points);
-                
-                if (points < 0) {
-                    // Es una falta
-                    redFouls += Math.abs(points);
-                    redFoulsDisplay.textContent = redFouls.toFixed(1);
-                    
-                    // Verificar si alcanza 3 faltas
-                    if (redFouls >= 3) {
-                        redWarning.style.display = 'block';
-                    }
-                }
-                
-                redScore += points;
-                redScoreDisplay.textContent = redScore;
-            });
-        });
+        // Reiniciar temporizador
+        function resetTimer() {
+            pauseTimer();
+            timeLeft = roundTimeInput.value * 60;
+            updateTimerDisplay();
+        }
         
-        document.querySelectorAll('.blue-side .point-btn, .blue-side .foul-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const points = parseFloat(this.dataset.points);
-                
-                if (points < 0) {
-                    // Es una falta
-                    blueFouls += Math.abs(points);
-                    blueFoulsDisplay.textContent = blueFouls.toFixed(1);
-                    
-                    // Verificar si alcanza 3 faltas
-                    if (blueFouls >= 3) {
-                        blueWarning.style.display = 'block';
-                    }
-                }
-                
-                blueScore += points;
-                blueScoreDisplay.textContent = blueScore;
-            });
-        });
+        // Manejar final de round
+        function handleRoundEnd() {
+            // Avanzar al siguiente round
+            currentRound++;
+            
+            if (currentRound <= totalRounds) {
+                currentRoundElement.textContent = currentRound;
+                timeLeft = roundTimeInput.value * 60;
+                updateTimerDisplay();
+                alert(`¡Round ${currentRound - 1} completado! Preparados para el siguiente round.`);
+            } else {
+                alert('¡Combate completado!');
+                // Aquí se podría agregar lógica para determinar el ganador final
+            }
+        }
         
-        // Inicializar
-        updateTimerDisplay();
+        // Abrir configuración
+        function openSettings() {
+            pauseTimer();
+            settingsModal.style.display = 'flex';
+        }
+        
+        // Cerrar configuración
+        function closeSettings() {
+            settingsModal.style.display = 'none';
+        }
+        
+        // Guardar configuración
+        function saveSettings() {
+            totalRounds = parseInt(totalRoundsInput.value);
+            timeLeft = parseInt(roundTimeInput.value) * 60;
+            
+            totalRoundsElement.textContent = totalRounds;
+            updateTimerDisplay();
+            closeSettings();
+        }
+        
+        // Reiniciar combate
+        function resetFight() {
+            pauseTimer();
+            
+            // Reiniciar puntos y faltas
+            hungPoints = 0;
+            hungFouls = 0;
+            chungPoints = 0;
+            chungFouls = 0;
+            
+            // Reiniciar rondas
+            currentRound = 1;
+            currentRoundElement.textContent = currentRound;
+            
+            // Reiniciar timer
+            timeLeft = roundTimeInput.value * 60;
+            updateTimerDisplay();
+            
+            // Actualizar displays
+            hungPointsElement.textContent = hungPoints;
+            chungPointsElement.textContent = chungPoints;
+            updateFoulsDisplay();
+            
+            // Ocultar mensajes de ganador
+            hungWinner.style.display = 'none';
+            chungWinner.style.display = 'none';
+            
+            // Habilitar botones
+            document.querySelectorAll('.btn-point').forEach(btn => {
+                btn.disabled = false;
+            });
+        }
+        
+        // Conectar dispositivo (simulado)
+        function connectDevice() {
+            alert('Buscando dispositivos...\n\nEn una implementación real, esto permitiría conectar otros dispositivos para controlar la aplicación.');
+        }
+        
+        // Manejar botones de puntos
+        function handlePointsButton(e) {
+            const competitor = e.target.dataset.competitor;
+            const points = parseFloat(e.target.dataset.points);
+            
+            if (competitor === 'hung') {
+                if (points < 0) {
+                    hungFouls += Math.abs(points);
+                    hungPoints += points; // Restar puntos
+                } else {
+                    hungPoints += points;
+                }
+                hungPointsElement.textContent = hungPoints;
+            } else {
+                if (points < 0) {
+                    chungFouls += Math.abs(points);
+                    chungPoints += points; // Restar puntos
+                } else {
+                    chungPoints += points;
+                }
+                chungPointsElement.textContent = chungPoints;
+            }
+            
+            updateFoulsDisplay();
+            checkForLoser();
+        }
+        
+        // Actualizar display de faltas
+        function updateFoulsDisplay() {
+            // Hung
+            hungFoulElements.forEach((foul, index) => {
+                if (hungFouls >= (index + 1)) {
+                    foul.classList.add('active');
+                } else {
+                    foul.classList.remove('active');
+                }
+            });
+            
+            // Chung
+            chungFoulElements.forEach((foul, index) => {
+                if (chungFouls >= (index + 1)) {
+                    foul.classList.add('active');
+                } else {
+                    foul.classList.remove('active');
+                }
+            });
+        }
+        
+        // Comprobar si hay un perdedor por faltas
+        function checkForLoser() {
+            if (hungFouls >= 3) {
+                chungWinner.style.display = 'flex';
+                disableAllButtons();
+            }
+            
+            if (chungFouls >= 3) {
+                hungWinner.style.display = 'flex';
+                disableAllButtons();
+            }
+        }
+        
+        // Deshabilitar todos los botones
+        function disableAllButtons() {
+            document.querySelectorAll('.btn-point').forEach(btn => {
+                btn.disabled = true;
+            });
+        }
+        
+        // Inicializar la aplicación cuando se carga la página
+        window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
