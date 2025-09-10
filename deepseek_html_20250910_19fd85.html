@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSO Servicios - Encuentra clientes cerca de ti</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2A6AB3;
+            --secondary: #FFA500;
+            --accent: #34B3A7;
+            --dark: #333333;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            --gray: #6C757D;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        .nav-menu a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu a i {
+            margin-right: 8px;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 250px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+        }
+        
+        .dropdown-content a {
+            color: var(--dark);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+            font-weight: normal;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        /* Search Section */
+        .search-section {
+            background-color: var(--primary);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--white);
+        }
+        
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .search-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .search-box {
+            display: flex;
+            background: var(--white);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-button {
+            background: var(--secondary);
+            border: none;
+            color: var(--white);
+            padding: 0 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .search-button:hover {
+            background: #e59400;
+        }
+        
+        .search-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        .search-tag {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-tag:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(42, 106, 179, 0.8), rgba(42, 106, 179, 0.8)), url('https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #e59400;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            padding: 30px 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        /* Benefits Section */
+        .benefits {
+            padding: 80px 0;
+            background-color: var(--light);
+        }
+        
+        .benefits-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .benefit-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .benefit-content h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        /* About Section */
+        .about {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .about-content p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        /* Competitors Section */
+        .competitors {
+            padding: 80px 0;
+            background-color: var(--light);
+        }
+        
+        .competitors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .competitor-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .competitor-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .competitor-logo {
+            height: 60px;
+            margin-bottom: 15px;
+            object-fit: contain;
+        }
+        
+        .competitor-card h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .competitor-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .competitor-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Contact Section */
+        .contact {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .contact-info {
+            text-align: center;
+        }
+        
+        .contact-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .contact-info h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .contact-info a {
+            color: var(--dark);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .contact-info a:hover {
+            color: var(--primary);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .social-links {
+            margin-bottom: 20px;
+        }
+        
+        .social-links a {
+            color: var(--white);
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            width: 100%;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                background-color: var(--white);
+                width: 80%;
+                height: calc(100vh - 70px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 50px;
+                transition: all 0.3s;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .nav-menu li {
+                margin: 20px 0;
+            }
+            
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                display: none;
+                margin-top: 10px;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .benefit-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .benefit-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .search-box {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+            
+            .search-input {
+                border-radius: 10px 10px 0 0;
+            }
+            
+            .search-button {
+                border-radius: 0 0 10px 10px;
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: 60px 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .service-card {
+                padding: 20px 15px;
+            }
+            
+            .search-tags {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-hands-helping"></i>
+                SSO Servicios
+            </a>
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#services"><i class="fas fa-concierge-bell"></i>Servicios</a></li>
+                <li><a href="#benefits"><i class="fas fa-star"></i>Beneficios</a></li>
+                <li><a href="#about"><i class="fas fa-users"></i>Quiénes Somos</a></li>
+                <li class="dropdown" id="competitors-dropdown">
+                    <a href="#competitors"><i class="fas fa-link"></i>Enlaces Útiles</a>
+                    <div class="dropdown-content">
+                        <a href="https://www.homeadvisor.com/" target="_blank"><i class="fas fa-external-link-alt"></i> HomeAdvisor</a>
+                        <a href="https://www.angieslist.com/" target="_blank"><i class="fas fa-external-link-alt"></i> Angie's List</a>
+                        <a href="https://www.thumbtack.com/" target="_blank"><i class="fas fa-external-link-alt"></i> Thumbtack</a>
+                        <a href="https://www.taskrabbit.com/" target="_blank"><i class="fas fa-external-link-alt"></i> TaskRabbit</a>
+                    </div>
+                </li>
+                <li><a href="#contact"><i class="fas fa-phone"></i>Contacto</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container search-container">
+            <h2 class="search-title">Encuentra clientes cerca de ti</h2>
+            <div class="search-box">
+                <input type="text" class="search-input" id="search-input" placeholder="¿Qué servicio ofreces?">
+                <button class="search-button" id="search-button">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+            <div class="search-tags">
+                <span class="search-tag" data-search="carpintero">Carpintero</span>
+                <span class="search-tag" data-search="albañil">Albañil</span>
+                <span class="search-tag" data-search="jardinero">Jardinero</span>
+                <span class="search-tag" data-search="fontanero">Fontanero</span>
+                <span class="search-tag" data-search="mudanzas">Mudanzas</span>
+                <span class="search-tag" data-search="electricista">Electricista</span>
+                <span class="search-tag" data-search="limpieza">Limpieza</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>SOLUCIONES RÁPIDAS Y CONFIABLES</h1>
+            <p>Conectamos profesionales con clientes que necesitan sus servicios</p>
+            <a href="#contact" class="btn">Únete como profesional</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title">¿QUÉ SERVICIOS OFRECES?</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <h3>CARPINTERO</h3>
+                    <p>Muebles, reparaciones y trabajos personalizados</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-trowel"></i>
+                    </div>
+                    <h3>ALBAÑIL</h3>
+                    <p>Construcción, reformas y reparaciones</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>JARDINERO</h3>
+                    <p>Diseño, mantenimiento y paisajismo</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-faucet"></i>
+                    </div>
+                    <h3>FONTANERO</h3>
+                    <p>Reparaciones, instalaciones y mantenimiento</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-truck-moving"></i>
+                    </div>
+                    <h3>MUDANZAS</h3>
+                    <p>Traslados locales, nacionales e internacionales</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>ELECTRICISTA</h3>
+                    <p>Instalaciones, reparaciones y mantenimiento</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-broom"></i>
+                    </div>
+                    <h3>SERVICIO LIMPIEZA</h3>
+                    <p>Limpieza residencial, comercial e industrial</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="benefits">
+        <div class="container">
+            <h2 class="section-title">BENEFICIOS PARA PROFESIONALES</h2>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>TE AYUDAMOS A MANTENER TU NEGOCIO ACTIVO</h3>
+                        <p>Conectamos tu negocio con clientes que necesitan tus servicios de manera constante.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>DAREMOS PUBLICIDAD A TUS SERVICIOS</h3>
+                        <p>Promocionamos tu trabajo en nuestra plataforma para que más clientes te encuentren.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>MEDIAREMOS CON LOS CLIENTES</h3>
+                        <p>Actuamos como intermediarios para garantizar una comunicación clara y acuerdos justos.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>SEGURIDAD DE COBRO AL TÉRMINO DEL SERVICIO</h3>
+                        <p>Nuestro sistema garantiza que recibas el pago una vez completado el trabajo satisfactoriamente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competitors Section -->
+    <section class="competitors" id="competitors">
+        <div class="container">
+            <h2 class="section-title">PLATAFORMAS SIMILARES</h2>
+            <p style="text-align: center; margin-bottom: 30px;">También puedes encontrar servicios en estas plataformas:</p>
+            <div class="competitors-grid">
+                <div class="competitor-card">
+                    <i class="fas fa-home competitor-logo" style="font-size: 50px; color: #f36f36;"></i>
+                    <h3>HomeAdvisor</h3>
+                    <p>Conecta propietarios con profesionales</p>
+                    <a href="https://www.homeadvisor.com/" target="_blank" class="competitor-link">Visitar sitio</a>
+                </div>
+                <div class="competitor-card">
+                    <i class="fas fa-list-alt competitor-logo" style="font-size: 50px; color: #29a6ce;"></i>
+                    <h3>Angie's List</h3>
+                    <p>Reseñas de servicios para el hogar</p>
+                    <a href="https://www.angieslist.com/" target="_blank" class="competitor-link">Visitar sitio</a>
+                </div>
+                <div class="competitor-card">
+                    <i class="fas fa-thumbtack competitor-logo" style="font-size: 50px; color: #009fd9;"></i>
+                    <h3>Thumbtack</h3>
+                    <p>Encuentra profesionales locales</p>
+                    <a href="https://www.thumbtack.com/" target="_blank" class="competitor-link">Visitar sitio</a>
+                </div>
+                <div class="competitor-card">
+                    <i class="fas fa-rabbit competitor-logo" style="font-size: 50px; color: #57bb67;"></i>
+                    <h3>TaskRabbit</h3>
+                    <p>Contrata ayuda para tareas</p>
+                    <a href="https://www.taskrabbit.com/" target="_blank" class="competitor-link">Visitar sitio</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">¿QUIÉNES SOMOS?</h2>
+            <div class="about-content">
+                <p>Somos una empresa que tiene como propósito llevar a todos los hogares de nuestros clientes los servicios que necesiten.</p>
+                <p>Mediamos entre los clientes y ustedes los profesionales, para que no exista ningún problema que impida la realización del proyecto y el término de éste.</p>
+                <p>Nuestra labor es la ayuda al profesional o negocio pequeño a prosperar y conseguir la satisfacción de ustedes y los usuarios finales.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">CONTACTO</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Sitio Web</h3>
+                    <a href="http://www.ssoservicios.com">www.ssoservicios.com</a>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email</h3>
+                    <a href="mailto:gerardo@sesohasoluciones.com">gerardo@sesohasoluciones.com</a>
+                    <a href="mailto:marketing@sesohasoluciones.com">marketing@sesohasoluciones.com</a>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Teléfono</h3>
+                    <a href="tel:+528142984988">+52 8142 98 4988</a>
+                    <a href="tel:+528127115058">+52 8127 11 5058</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 SSO Servicios. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const searchTags = document.querySelectorAll('.search-tag');
+        
+        // Focus on search input when page loads
+        window.addEventListener('load', () => {
+            searchInput.focus();
+        });
+        
+        // Search button click event
+        searchButton.addEventListener('click', performSearch);
+        
+        // Search when pressing Enter
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        // Search tag click events
+        searchTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                searchInput.value = tag.getAttribute('data-search');
+                performSearch();
+            });
+        });
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            
+            if (searchTerm) {
+                // In a real application, this would send a request to a server
+                // For this demo, we'll just show an alert and scroll to services
+                alert(`Buscando: ${searchTerm}`);
+                
+                // Scroll to services section
+                document.getElementById('services').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            } else {
+                alert('Por favor, ingresa un término de búsqueda');
+                searchInput.focus();
+            }
+        }
+        
+        // Mobile dropdown handling
+        const competitorsDropdown = document.getElementById('competitors-dropdown');
+        
+        if (window.innerWidth <= 768) {
+            competitorsDropdown.addEventListener('click', (e) => {
+                e.preventDefault();
+                competitorsDropdown.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

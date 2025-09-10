@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSO Servicios - Encuentra clientes cerca de ti</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2A6AB3;
+            --secondary: #FFA500;
+            --accent: #34B3A7;
+            --dark: #333333;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            --gray: #6C757D;
+            --light-gray: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-left: 30px;
+        }
+        
+        .nav-menu a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-menu a i {
+            margin-right: 8px;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        /* Search Section */
+        .search-section {
+            background-color: var(--primary);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--white);
+        }
+        
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .search-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .search-box {
+            display: flex;
+            background: var(--white);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-button {
+            background: var(--secondary);
+            border: none;
+            color: var(--white);
+            padding: 0 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .search-button:hover {
+            background: #e59400;
+        }
+        
+        .search-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        .search-tag {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-tag:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Results Section */
+        .results-section {
+            padding: 40px 0;
+            display: none;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .results-count {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+        
+        .view-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .view-option {
+            background: var(--white);
+            border: 1px solid var(--light-gray);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-option.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        .results-content {
+            display: flex;
+            gap: 30px;
+        }
+        
+        /* Filters */
+        .filters {
+            width: 280px;
+            flex-shrink: 0;
+        }
+        
+        .filter-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .filter-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .filter-reset {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .filter-group-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filter-option input {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .filter-option label {
+            cursor: pointer;
+        }
+        
+        .rating-stars {
+            color: #FFD700;
+            font-size: 0.9rem;
+        }
+        
+        .price-range {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .price-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+        }
+        
+        /* Results List */
+        .results-list {
+            flex: 1;
+        }
+        
+        .result-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            transition: transform 0.3s;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .result-image {
+            width: 200px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .result-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .result-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--secondary);
+            color: var(--white);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .result-content {
+            padding: 20px;
+            flex: 1;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .result-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .result-subtitle {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .result-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--light);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        .result-rating span {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .result-features {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .result-feature {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .result-feature i {
+            color: var(--primary);
+        }
+        
+        .result-description {
+            margin-bottom: 15px;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .result-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-price {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .result-price span {
+            font-size: 0.9rem;
+            font-weight: normal;
+            color: var(--gray);
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background-color: #1e5a9a;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            gap: 10px;
+        }
+        
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            background: var(--white);
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pagination-item.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .pagination-item:hover:not(.active) {
+            background: var(--light-gray);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .results-content {
+                flex-direction: column;
+            }
+            
+            .filters {
+                width: 100%;
+            }
+            
+            .result-card {
+                flex-direction: column;
+            }
+            
+            .result-image {
+                width: 100%;
+                height: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                background-color: var(--white);
+                width: 80%;
+                height: calc(100vh - 70px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 50px;
+                transition: all 0.3s;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .nav-menu li {
+                margin: 20px 0;
+            }
+            
+            .result-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .result-features {
+                flex-wrap: wrap;
+            }
+            
+            .result-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .result-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .search-box {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+            
+            .search-input {
+                border-radius: 10px 10px 0 0;
+            }
+            
+            .search-button {
+                border-radius: 0 0 10px 10px;
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .search-tags {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .view-options {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-hands-helping"></i>
+                SSO Servicios
+            </a>
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#"><i class="fas fa-concierge-bell"></i>Servicios</a></li>
+                <li><a href="#"><i class="fas fa-star"></i>Beneficios</a></li>
+                <li><a href="#"><i class="fas fa-users"></i>Quiénes Somos</a></li>
+                <li><a href="#"><i class="fas fa-phone"></i>Contacto</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-section" id="search-section">
+        <div class="container search-container">
+            <h2 class="search-title">Encuentra clientes cerca de ti</h2>
+            <div class="search-box">
+                <input type="text" class="search-input" id="search-input" placeholder="¿Qué servicio ofreces?">
+                <button class="search-button" id="search-button">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+            <div class="search-tags">
+                <span class="search-tag" data-search="carpintero">Carpintero</span>
+                <span class="search-tag" data-search="albañil">Albañil</span>
+                <span class="search-tag" data-search="jardinero">Jardinero</span>
+                <span class="search-tag" data-search="fontanero">Fontanero</span>
+                <span class="search-tag" data-search="mudanzas">Mudanzas</span>
+                <span class="search-tag" data-search="electricista">Electricista</span>
+                <span class="search-tag" data-search="limpieza">Limpieza</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section" id="results-section">
+        <div class="container">
+            <div class="results-header">
+                <div class="results-count">Se encontraron <strong>24</strong> resultados para "<strong>carpintero</strong>"</div>
+                <div class="view-options">
+                    <div class="view-option active" id="view-all">Todos</div>
+                    <div class="view-option" id="view-map">Ver en Mapa</div>
+                </div>
+            </div>
+            
+            <div class="results-content">
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-card">
+                        <div class="filter-title">
+                            Filtros
+                            <span class="filter-reset" id="reset-filters">Limpiar</span>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <span class="filter-group-title">Reputación</span>
+                            <div class="filter-options">
+                                <div class="filter-option">
+                                    <input type="checkbox" id="rating-5" checked>
+                                    <label for="rating-5">
+                                        <div class="rating-stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        (4.5+)
+                                    </label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="rating-4" checked>
+                                    <label for="rating-4">
+                                        <div class="rating-stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        (4.0+)
+                                    </label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="rating-3" checked>
+                                    <label for="rating-3">
+                                        <div class="rating-stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        (3.0+)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <span class="filter-group-title">Precio por hora</span>
+                            <div class="price-range">
+                                <div class="price-inputs">
+                                    <input type="number" class="price-input" placeholder="Mín" value="50">
+                                    <input type="number" class="price-input" placeholder="Máx" value="300">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <span class="filter-group-title">Disponibilidad</span>
+                            <div class="filter-options">
+                                <div class="filter-option">
+                                    <input type="checkbox" id="availability-now" checked>
+                                    <label for="availability-now">Disponible ahora</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="availability-week" checked>
+                                    <label for="availability-week">Esta semana</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="availability-next" checked>
+                                    <label for="availability-next">La próxima semana</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <span class="filter-group-title">Servicios</span>
+                            <div class="filter-options">
+                                <div class="filter-option">
+                                    <input type="checkbox" id="service-furniture" checked>
+                                    <label for="service-furniture">Muebles</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="service-repair" checked>
+                                    <label for="service-repair">Reparaciones</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="service-installation" checked>
+                                    <label for="service-installation">Instalación</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="service-custom" checked>
+                                    <label for="service-custom">Trabajos personalizados</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-card">
+                        <div class="filter-title">
+                            Ubicación
+                        </div>
+                        <div class="filter-group">
+                            <div class="filter-options">
+                                <div class="filter-option">
+                                    <input type="radio" id="location-5km" name="location" checked>
+                                    <label for="location-5km">Menos de 5 km</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="location-10km" name="location">
+                                    <label for="location-10km">Menos de 10 km</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="location-20km" name="location">
+                                    <label for="location-20km">Menos de 20 km</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="location-any" name="location">
+                                    <label for="location-any">Cualquier distancia</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results List -->
+                <div class="results-list">
+                    <!-- Result Card 1 -->
+                    <div class="result-card">
+                        <div class="result-image">
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Carpintero">
+                            <div class="result-badge">Disponible hoy</div>
+                        </div>
+                        <div class="result-content">
+                            <div class="result-header">
+                                <div>
+                                    <h3 class="result-title">Juan Pérez</h3>
+                                    <div class="result-subtitle">Carpintero con 15 años de experiencia</div>
+                                    <div class="result-rating">
+                                        <div class="rating-stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <span>4.8</span>
+                                        <span>(128 reviews)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="result-features">
+                                <div class="result-feature">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>3.2 km de distancia</span>
+                                </div>
+                                <div class="result-feature">
+                                    <i class="fas fa-briefcase"></i>
+                                    <span>125 proyectos</span>
+                                </div>
+                                <div class="result-feature">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Disponible hoy</span>
+                                </div>
+                            </div>
+                            
+                            <p class="result-description">
+                                Especialista en muebles personalizados, reparaciones y trabajos de carpintería fina. Ofrezco servicios de calidad con materiales duraderos.
+                            </p>
+                            
+                            <div class="result-footer">
+                                <div class="result-price">
+                                    $180 <span>/hora</span>
+                                </div>
+                                <div class="result-actions">
+                                    <a href="#" class="btn btn-outline">Ver perfil</a>
+                                    <a href="#" class="btn btn-primary">Contactar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Result Card 2 -->
+                    <div class="result-card">
+                        <div class="result-image">
+                            <img src="https://images.unsplash.com/photo-1608755728612-bb8c151a13a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Carpintero">
+                            <div class="result-badge">Premium</div>
+                        </div>
+                        <div class="result-content">
+                            <div class="result-header">
+                                <div>
+                                    <h3 class="result-title">Carlos Rodríguez</h3>
+                                    <div class="result-subtitle">Especialista en muebles a medida</div>
+                                    <div class="result-rating">
+                                        <div class="rating-stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <span>5.0</span>
+                                        <span>(94 reviews)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="result-features">
+                                <div class="result-feature">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>5.7 km de distancia</span>
+                                </div>
+                                <div class="result-feature">
+                                    <i class="fas fa-briefcase"></i>
+                                    <span>87 proyectos</span>
+                                </div>
+                                <div class="result-feature">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Disponible mañana</span>
+                                </div>
+                            </div>
+                            
+                            <p class="result-description">
+                                Carpintero especializado en diseño y fabricación de muebles a medida. Trabajo con los mejores materiales y garantizo satisfacción total.
+                            </p>
+                            
+                            <div class="result-footer">
+                                <div class="result-price">
+                                    $250 <span>/hora</span>
+                                </div>
+                                <div class="result-actions">
+                                    <a href="#" class="btn btn-outline">Ver perfil</a>
+                                    <a href="#" class="btn btn-primary">Contactar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Result Card 3 -->
+                    <div class="result-card">
+                        <div class="result-image">
+                            <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Carpintero">
+                        </div>
+                        <div class="result-content">
+                            <div class="result-header">
+                                <div>
+                                    <h3 class="result-title">Miguel Sánchez</h3>
+                                    <div class="result-subtitle">Carpintero y ebanista profesional</div>
+                                    <div class="result-rating">
+                                        <div class="rating-stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <span>4.2</span>
+                                        <span>(63 reviews)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="result-features">
+                                <div class="result-feature">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>2.1 km de distancia</span>
+                                </div>
+                                <div class="result-feature">
+                                    <i class="fas fa-briefcase"></i>
+                                    <span>42 proyectos</span>
+                                </div>
+                                <div class="result-feature">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Disponible en 3 días</span>
+                                </div>
+                            </div>
+                            
+                            <p class="result-description">
+                                Ebanista con más de 10 años de experiencia en trabajos de carpintería fina, restauración y fabricación de muebles clásicos y modernos.
+                            </p>
+                            
+                            <div class="result-footer">
+                                <div class="result-price">
+                                    $160 <span>/hora</span>
+                                </div>
+                                <div class="result-actions">
+                                    <a href="#" class="btn btn-outline">Ver perfil</a>
+                                    <a href="#" class="btn btn-primary">Contactar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <a href="#" class="pagination-item active">1</a>
+                <a href="#" class="pagination-item">2</a>
+                <a href="#" class="pagination-item">3</a>
+                <a href="#" class="pagination-item">4</a>
+                <a href="#" class="pagination-item">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+        
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const searchTags = document.querySelectorAll('.search-tag');
+        const searchSection = document.getElementById('search-section');
+        const resultsSection = document.getElementById('results-section');
+        
+        // Focus on search input when page loads
+        window.addEventListener('load', () => {
+            searchInput.focus();
+        });
+        
+        // Search button click event
+        searchButton.addEventListener('click', performSearch);
+        
+        // Search when pressing Enter
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        // Search tag click events
+        searchTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                searchInput.value = tag.getAttribute('data-search');
+                performSearch();
+            });
+        });
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.trim();
+            
+            if (searchTerm) {
+                // Show results section
+                searchSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+                
+                // Update search results count
+                document.querySelector('.results-count strong').textContent = '24';
+                document.querySelector('.results-count strong:nth-child(2)').textContent = searchTerm;
+                
+                // Scroll to results
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                alert('Por favor, ingresa un término de búsqueda');
+                searchInput.focus();
+            }
+        }
+        
+        // Filter functionality
+        const resetFiltersBtn = document.getElementById('reset-filters');
+        const filterCheckboxes = document.querySelectorAll('.filter-option input');
+        
+        resetFiltersBtn.addEventListener('click', () => {
+            filterCheckboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        });
+        
+        // View options
+        const viewAll = document.getElementById('view-all');
+        const viewMap = document.getElementById('view-map');
+        
+        viewAll.addEventListener('click', () => {
+            viewAll.classList.add('active');
+            viewMap.classList.remove('active');
+        });
+        
+        viewMap.addEventListener('click', () => {
+            viewMap.classList.add('active');
+            viewAll.classList.remove('active');
+            alert('Vista de mapa activada. En una aplicación real, se mostraría un mapa con la ubicación de los profesionales.');
+        });
+    </script>
+</body>
+</html>
