@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -269,9 +269,9 @@
     <div class="collapse navbar-collapse" id="navDash">
       <ul class="navbar-nav ms-auto gap-1">
         <li class="nav-item"><a class="nav-link active" href="#" data-nav="dashboard"><i class="fas fa-th-large me-1"></i>Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-nav="reportes"><i class="fas fa-chart-bar me-1"></i>Reportes</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-nav="analitica"><i class="fas fa-table me-1"></i>Analítica</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-nav="ajustes"><i class="fas fa-cog me-1"></i>Ajustes</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-nav="reportes"><i class="fas fa-chart-bar me-1"></i>Reports</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-nav="analitica"><i class="fas fa-table me-1"></i>Analytics</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-nav="ajustes"><i class="fas fa-cog me-1"></i>Settings</a></li>
       </ul>
     </div>
   </div>
@@ -283,11 +283,11 @@
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 fade-section" id="sectionDashboard">
       <div>
-        <h1 class="display-6 fw-bold mb-0" style="letter-spacing: -1px;">Panel de Ventas</h1>
-        <p class="text-secondary-emphasis small">Resumen anual · 2026</p>
+        <h1 class="display-6 fw-bold mb-0" style="letter-spacing: -1px;">Sales Dashboard</h1>
+        <p class="text-secondary-emphasis small">Annual summary · 2026</p>
       </div>
       <span class="badge rounded-pill px-3 py-2" style="background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.2); font-weight: 500;">
-        <i class="fas fa-sync-alt me-1"></i>Actualizado ahora
+        <i class="fas fa-sync-alt me-1"></i>Updated now
       </span>
     </div>
 
@@ -297,7 +297,7 @@
         <div class="card-kpi d-flex align-items-center gap-3">
           <div class="kpi-icon flex-shrink-0"><i class="fas fa-dollar-sign"></i></div>
           <div class="flex-grow-1 min-w-0">
-            <div class="kpi-label">Ingresos totales</div>
+            <div class="kpi-label">Total Revenue</div>
             <div class="kpi-value" id="kpiRevenue">$0</div>
           </div>
         </div>
@@ -306,7 +306,7 @@
         <div class="card-kpi d-flex align-items-center gap-3">
           <div class="kpi-icon flex-shrink-0" style="background: rgba(59,130,246,0.12); color: #60a5fa;"><i class="fas fa-box"></i></div>
           <div class="flex-grow-1 min-w-0">
-            <div class="kpi-label">Unidades vendidas</div>
+            <div class="kpi-label">Units Sold</div>
             <div class="kpi-value" id="kpiUnits">0</div>
           </div>
         </div>
@@ -315,7 +315,7 @@
         <div class="card-kpi d-flex align-items-center gap-3">
           <div class="kpi-icon flex-shrink-0" style="background: rgba(52,211,153,0.12); color: #34d399;"><i class="fas fa-arrow-up"></i></div>
           <div class="flex-grow-1 min-w-0">
-            <div class="kpi-label">Crecimiento prom.</div>
+            <div class="kpi-label">Avg. Growth</div>
             <div class="kpi-value" id="kpiGrowth">0%</div>
           </div>
         </div>
@@ -324,7 +324,7 @@
         <div class="card-kpi d-flex align-items-center gap-3">
           <div class="kpi-icon flex-shrink-0" style="background: rgba(251,113,133,0.12); color: #fb7185;"><i class="fas fa-trophy"></i></div>
           <div class="flex-grow-1 min-w-0">
-            <div class="kpi-label">Mejor mes</div>
+            <div class="kpi-label">Best Month</div>
             <div class="kpi-value" id="kpiBestMonth" style="font-size: 1.4rem;">-</div>
           </div>
         </div>
@@ -336,7 +336,7 @@
       <div class="col-lg-8 fade-section">
         <div class="chart-card h-100">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <span class="card-title"><i class="fas fa-chart-simple me-1"></i> Ingresos mensuales</span>
+            <span class="card-title"><i class="fas fa-chart-simple me-1"></i> Monthly Revenue</span>
             <span class="badge bg-white bg-opacity-10 rounded-pill px-3" style="font-size:0.65rem;">2026</span>
           </div>
           <div class="chart-wrapper"><canvas id="chartMain"></canvas></div>
@@ -345,7 +345,7 @@
       <div class="col-lg-4 fade-section">
         <div class="chart-card h-100">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <span class="card-title"><i class="fas fa-chart-pie me-1"></i> Por categoría</span>
+            <span class="card-title"><i class="fas fa-chart-pie me-1"></i> By Category</span>
             <span class="badge bg-white bg-opacity-10 rounded-pill px-3" style="font-size:0.65rem;">share</span>
           </div>
           <div class="chart-wrapper"><canvas id="chartDonut"></canvas></div>
@@ -356,10 +356,10 @@
     <!-- TABLE -->
     <div class="chart-card fade-section" id="sectionAnalitica">
       <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <span class="card-title"><i class="fas fa-table me-1"></i> Detalle mensual</span>
+        <span class="card-title"><i class="fas fa-table me-1"></i> Monthly Detail</span>
         <div>
           <span class="badge bg-white bg-opacity-10 rounded-pill px-3 py-2" style="font-size:0.65rem; cursor: pointer;" id="btnExportar">
-            <i class="fas fa-download me-1"></i> Exportar
+            <i class="fas fa-download me-1"></i> Export
           </span>
         </div>
       </div>
@@ -367,11 +367,11 @@
         <table class="table table-dashboard">
           <thead>
             <tr>
-              <th>Mes</th>
-              <th class="text-end">Ingresos</th>
-              <th class="text-end">Unidades</th>
-              <th class="text-end">Crecimiento</th>
-              <th class="text-end">Desempeño</th>
+              <th>Month</th>
+              <th class="text-end">Revenue</th>
+              <th class="text-end">Units</th>
+              <th class="text-end">Growth</th>
+              <th class="text-end">Performance</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -381,7 +381,7 @@
 
     <!-- FOOTER -->
     <footer class="footer-dash text-center py-4 mt-4">
-      <i class="fas fa-chart-line me-1"></i> saleshub &middot; dashboard 2026 &middot; datos estáticos
+      <i class="fas fa-chart-line me-1"></i> saleshub &middot; dashboard 2026 &middot; static data
     </footer>
 
   </div>
@@ -392,25 +392,25 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content" style="background: rgba(18,18,30,0.95); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px;">
       <div class="modal-header border-0">
-        <h5 class="modal-title fw-bold"><i class="fas fa-cog me-2 text-glow-purple"></i>Ajustes</h5>
+        <h5 class="modal-title fw-bold"><i class="fas fa-cog me-2 text-glow-purple"></i>Settings</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex flex-column gap-3">
           <div class="d-flex justify-content-between align-items-center">
-            <span style="color: rgba(255,255,255,0.6);">Notificaciones</span>
+            <span style="color: rgba(255,255,255,0.6);">Notifications</span>
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox" id="switchNotif" checked style="cursor: pointer;">
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-center">
-            <span style="color: rgba(255,255,255,0.6);">Actualización automática</span>
+            <span style="color: rgba(255,255,255,0.6);">Auto update</span>
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox" id="switchAuto" checked style="cursor: pointer;">
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-center">
-            <span style="color: rgba(255,255,255,0.6);">Modo compacto</span>
+            <span style="color: rgba(255,255,255,0.6);">Compact mode</span>
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox" id="switchCompact" style="cursor: pointer;">
             </div>
@@ -418,7 +418,7 @@
         </div>
       </div>
       <div class="modal-footer border-0">
-        <button class="btn px-4 py-2 rounded-pill fw-semibold" style="background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.2);" data-bs-dismiss="modal">Cerrar</button>
+        <button class="btn px-4 py-2 rounded-pill fw-semibold" style="background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.2);" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -432,18 +432,18 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---- DATA ---- */
   const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   const salesData = [
-    { month: 'Ene', revenue: 28400, units: 1200, growth: 12.5 },
+    { month: 'Jan', revenue: 28400, units: 1200, growth: 12.5 },
     { month: 'Feb', revenue: 32100, units: 1350, growth: 13.0 },
     { month: 'Mar', revenue: 29800, units: 1280, growth: -7.2 },
-    { month: 'Abr', revenue: 35600, units: 1450, growth: 19.5 },
+    { month: 'Apr', revenue: 35600, units: 1450, growth: 19.5 },
     { month: 'May', revenue: 37200, units: 1520, growth: 4.5 },
     { month: 'Jun', revenue: 41800, units: 1680, growth: 12.4 },
     { month: 'Jul', revenue: 39400, units: 1600, growth: -5.7 },
-    { month: 'Ago', revenue: 44500, units: 1750, growth: 12.9 },
+    { month: 'Aug', revenue: 44500, units: 1750, growth: 12.9 },
     { month: 'Sep', revenue: 42900, units: 1700, growth: -3.6 },
     { month: 'Oct', revenue: 46800, units: 1820, growth: 9.1 },
     { month: 'Nov', revenue: 49100, units: 1900, growth: 4.9 },
-    { month: 'Dic', revenue: 52300, units: 2010, growth: 6.5 }
+    { month: 'Dec', revenue: 52300, units: 2010, growth: 6.5 }
   ];
 
   /* ---- CALC KPI ---- */
@@ -510,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
       labels: months,
       datasets: [
         {
-          label: 'Ingresos',
+          label: 'Revenue',
           data: salesData.map(d => d.revenue),
           backgroundColor: 'rgba(139, 92, 246, 0.55)',
           borderColor: 'rgba(139, 92, 246, 0.8)',
@@ -521,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
           order: 2
         },
         {
-          label: 'Unidades',
+          label: 'Units',
           data: salesData.map(d => d.units),
           type: 'line',
           borderColor: '#34d399',
@@ -600,7 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
   new Chart(document.getElementById('chartDonut').getContext('2d'), {
     type: 'doughnut',
     data: {
-      labels: ['Electrónica', 'Ropa', 'Hogar', 'Deportes', 'Otros'],
+      labels: ['Electronics', 'Clothing', 'Home', 'Sports', 'Others'],
       datasets: [{
         data: [38, 22, 18, 12, 10],
         backgroundColor: ['#8b5cf6', '#3b82f6', '#34d399', '#f59e0b', '#64748b'],
@@ -696,7 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- EXPORT CSV ---- */
   document.getElementById('btnExportar').addEventListener('click', () => {
-    let csv = 'Mes,Ingresos,Unidades,Crecimiento\n';
+    let csv = 'Month,Revenue,Units,Growth\n';
     salesData.forEach(d => {
       csv += `${d.month},${d.revenue},${d.units},${d.growth}\n`;
     });
