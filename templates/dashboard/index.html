@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Ventas 2026</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0f; }
+    ::-webkit-scrollbar-thumb { background: #2a2a3e; border-radius: 8px; }
+
+    body {
+      background: #0a0a0f;
+      color: #e0e0e8;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .bg-gradient-animated {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(ellipse 80% 60% at 20% 20%, rgba(59, 42, 115, 0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 50% at 80% 80%, rgba(30, 64, 138, 0.2) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 40% at 50% 50%, rgba(88, 28, 135, 0.1) 0%, transparent 50%);
+      animation: gradientShift 15s ease-in-out infinite alternate;
+    }
+    @keyframes gradientShift {
+      0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+      100% { transform: scale(1.2) rotate(3deg); opacity: 1; }
+    }
+
+    /* letterbox effect */
+    .letterbox {
+      min-height: 100vh;
+      padding: 0 16px;
+    }
+    @media (min-width: 1200px) {
+      .letterbox { padding: 0 48px; }
+    }
+
+    /* navbar glass */
+    .navbar-glass {
+      background: rgba(10, 10, 18, 0.7);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
+    }
+    .navbar-glass .nav-link {
+      color: rgba(255, 255, 255, 0.6);
+      transition: color 0.3s, text-shadow 0.3s;
+      position: relative;
+    }
+    .navbar-glass .nav-link:hover,
+    .navbar-glass .nav-link.active {
+      color: #fff;
+      text-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+    }
+    .navbar-glass .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 2px; left: 50%;
+      width: 0; height: 2px;
+      background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+      transition: all 0.3s;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .navbar-glass .nav-link:hover::after,
+    .navbar-glass .nav-link.active::after {
+      width: 70%;
+    }
+    .brand-glow {
+      background: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    /* KPI cards */
+    .card-kpi {
+      background: rgba(18, 18, 30, 0.65);
+      backdrop-filter: blur(16px) saturate(1.3);
+      -webkit-backdrop-filter: blur(16px) saturate(1.3);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 1.5rem 1.25rem;
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease;
+      transform-style: preserve-3d;
+      perspective: 800px;
+      will-change: transform;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-kpi::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      background: linear-gradient(135deg, transparent 40%, rgba(139, 92, 246, 0.06) 100%);
+      pointer-events: none;
+    }
+    .card-kpi:hover {
+      transform: translateY(-6px) rotateX(2deg) rotateY(-2deg);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.08);
+      border-color: rgba(139, 92, 246, 0.25);
+    }
+    .card-kpi .kpi-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      background: rgba(139, 92, 246, 0.12);
+      color: #8b5cf6;
+      transition: all 0.3s;
+    }
+    .card-kpi:hover .kpi-icon {
+      background: rgba(139, 92, 246, 0.2);
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
+    }
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1.2;
+    }
+    .kpi-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.35);
+    }
+    .kpi-badge {
+      font-size: 0.7rem;
+      padding: 0.2em 0.7em;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* charts */
+    .chart-card {
+      background: rgba(18, 18, 30, 0.55);
+      backdrop-filter: blur(16px) saturate(1.3);
+      -webkit-backdrop-filter: blur(16px) saturate(1.3);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 1.5rem;
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+    .chart-card:hover {
+      border-color: rgba(139, 92, 246, 0.2);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+    }
+    .chart-card .card-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .chart-wrapper {
+      position: relative;
+      height: 260px;
+      max-height: 260px;
+    }
+    .chart-wrapper canvas {
+      max-height: 260px !important;
+    }
+
+    /* table */
+    .table-dashboard {
+      --bs-table-bg: transparent;
+      --bs-table-hover-bg: rgba(139, 92, 246, 0.05);
+      --bs-table-color: #e0e0e8;
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+    .table-dashboard thead th {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 1.2px;
+      font-weight: 600;
+      padding: 1rem 0.75rem;
+    }
+    .table-dashboard tbody td {
+      padding: 0.9rem 0.75rem;
+      border-color: rgba(255, 255, 255, 0.04);
+      vertical-align: middle;
+    }
+    .table-dashboard tbody tr {
+      transition: background 0.2s;
+    }
+
+    /* fade-in */
+    .fade-section {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fade-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* footer */
+    .footer-dash {
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* utility glow text */
+    .text-glow-purple {
+      color: #a78bfa;
+      text-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
+    }
+    .text-glow-blue {
+      color: #60a5fa;
+      text-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+    }
+    .text-glow-green {
+      color: #34d399;
+      text-shadow: 0 0 30px rgba(52, 211, 153, 0.15);
+    }
+    .text-glow-rose {
+      color: #fb7185;
+      text-shadow: 0 0 30px rgba(251, 113, 133, 0.15);
+    }
+
+    /* fix container padding for navbar fixed */
+    .dash-container {
+      padding-top: 88px;
+      padding-bottom: 2rem;
+    }
+
+    /* responsive adjustments */
+    @media (max-width: 576px) {
+      .kpi-value { font-size: 1.5rem; }
+      .card-kpi { padding: 1rem; }
+      .chart-card { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-gradient-animated"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-md navbar-glass fixed-top py-3">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand brand-glow fw-bold fs-4" href="#">
+      <i class="fas fa-chart-line me-2" style="background: linear-gradient(135deg,#8b5cf6,#3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+      sales<span style="font-weight: 300;">hub</span>
+    </a>
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navDash">
+      <i class="fas fa-bars" style="color: rgba(255,255,255,0.5); font-size: 1.4rem;"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navDash">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link active" href="#" data-nav="dashboard"><i class="fas fa-th-large me-1"></i>Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-nav="reportes"><i class="fas fa-chart-bar me-1"></i>Reportes</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-nav="analitica"><i class="fas fa-table me-1"></i>Analítica</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-nav="ajustes"><i class="fas fa-cog me-1"></i>Ajustes</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="letterbox dash-container">
+  <div class="container-fluid px-2">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 fade-section" id="sectionDashboard">
+      <div>
+        <h1 class="display-6 fw-bold mb-0" style="letter-spacing: -1px;">Panel de Ventas</h1>
+        <p class="text-secondary-emphasis small">Resumen anual · 2026</p>
+      </div>
+      <span class="badge rounded-pill px-3 py-2" style="background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.2); font-weight: 500;">
+        <i class="fas fa-sync-alt me-1"></i>Actualizado ahora
+      </span>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="row g-3 mb-4" id="kpiRow">
+      <div class="col-6 col-xl-3 fade-section">
+        <div class="card-kpi d-flex align-items-center gap-3">
+          <div class="kpi-icon flex-shrink-0"><i class="fas fa-dollar-sign"></i></div>
+          <div class="flex-grow-1 min-w-0">
+            <div class="kpi-label">Ingresos totales</div>
+            <div class="kpi-value" id="kpiRevenue">$0</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3 fade-section">
+        <div class="card-kpi d-flex align-items-center gap-3">
+          <div class="kpi-icon flex-shrink-0" style="background: rgba(59,130,246,0.12); color: #60a5fa;"><i class="fas fa-box"></i></div>
+          <div class="flex-grow-1 min-w-0">
+            <div class="kpi-label">Unidades vendidas</div>
+            <div class="kpi-value" id="kpiUnits">0</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3 fade-section">
+        <div class="card-kpi d-flex align-items-center gap-3">
+          <div class="kpi-icon flex-shrink-0" style="background: rgba(52,211,153,0.12); color: #34d399;"><i class="fas fa-arrow-up"></i></div>
+          <div class="flex-grow-1 min-w-0">
+            <div class="kpi-label">Crecimiento prom.</div>
+            <div class="kpi-value" id="kpiGrowth">0%</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3 fade-section">
+        <div class="card-kpi d-flex align-items-center gap-3">
+          <div class="kpi-icon flex-shrink-0" style="background: rgba(251,113,133,0.12); color: #fb7185;"><i class="fas fa-trophy"></i></div>
+          <div class="flex-grow-1 min-w-0">
+            <div class="kpi-label">Mejor mes</div>
+            <div class="kpi-value" id="kpiBestMonth" style="font-size: 1.4rem;">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="row g-3 mb-4" id="sectionReportes">
+      <div class="col-lg-8 fade-section">
+        <div class="chart-card h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="card-title"><i class="fas fa-chart-simple me-1"></i> Ingresos mensuales</span>
+            <span class="badge bg-white bg-opacity-10 rounded-pill px-3" style="font-size:0.65rem;">2026</span>
+          </div>
+          <div class="chart-wrapper"><canvas id="chartMain"></canvas></div>
+        </div>
+      </div>
+      <div class="col-lg-4 fade-section">
+        <div class="chart-card h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="card-title"><i class="fas fa-chart-pie me-1"></i> Por categoría</span>
+            <span class="badge bg-white bg-opacity-10 rounded-pill px-3" style="font-size:0.65rem;">share</span>
+          </div>
+          <div class="chart-wrapper"><canvas id="chartDonut"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="chart-card fade-section" id="sectionAnalitica">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <span class="card-title"><i class="fas fa-table me-1"></i> Detalle mensual</span>
+        <div>
+          <span class="badge bg-white bg-opacity-10 rounded-pill px-3 py-2" style="font-size:0.65rem; cursor: pointer;" id="btnExportar">
+            <i class="fas fa-download me-1"></i> Exportar
+          </span>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-dashboard">
+          <thead>
+            <tr>
+              <th>Mes</th>
+              <th class="text-end">Ingresos</th>
+              <th class="text-end">Unidades</th>
+              <th class="text-end">Crecimiento</th>
+              <th class="text-end">Desempeño</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer-dash text-center py-4 mt-4">
+      <i class="fas fa-chart-line me-1"></i> saleshub &middot; dashboard 2026 &middot; datos estáticos
+    </footer>
+
+  </div>
+</main>
+
+<!-- MODAL AJUSTES -->
+<div class="modal fade" id="modalAjustes" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: rgba(18,18,30,0.95); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px;">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold"><i class="fas fa-cog me-2 text-glow-purple"></i>Ajustes</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <span style="color: rgba(255,255,255,0.6);">Notificaciones</span>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="switchNotif" checked style="cursor: pointer;">
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span style="color: rgba(255,255,255,0.6);">Actualización automática</span>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="switchAuto" checked style="cursor: pointer;">
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span style="color: rgba(255,255,255,0.6);">Modo compacto</span>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="switchCompact" style="cursor: pointer;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0">
+        <button class="btn px-4 py-2 rounded-pill fw-semibold" style="background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.2);" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* ---- DATA ---- */
+  const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const salesData = [
+    { month: 'Ene', revenue: 28400, units: 1200, growth: 12.5 },
+    { month: 'Feb', revenue: 32100, units: 1350, growth: 13.0 },
+    { month: 'Mar', revenue: 29800, units: 1280, growth: -7.2 },
+    { month: 'Abr', revenue: 35600, units: 1450, growth: 19.5 },
+    { month: 'May', revenue: 37200, units: 1520, growth: 4.5 },
+    { month: 'Jun', revenue: 41800, units: 1680, growth: 12.4 },
+    { month: 'Jul', revenue: 39400, units: 1600, growth: -5.7 },
+    { month: 'Ago', revenue: 44500, units: 1750, growth: 12.9 },
+    { month: 'Sep', revenue: 42900, units: 1700, growth: -3.6 },
+    { month: 'Oct', revenue: 46800, units: 1820, growth: 9.1 },
+    { month: 'Nov', revenue: 49100, units: 1900, growth: 4.9 },
+    { month: 'Dic', revenue: 52300, units: 2010, growth: 6.5 }
+  ];
+
+  /* ---- CALC KPI ---- */
+  const totalRevenue = salesData.reduce((s, d) => s + d.revenue, 0);
+  const totalUnits = salesData.reduce((s, d) => s + d.units, 0);
+  const avgGrowth = salesData.reduce((s, d) => s + d.growth, 0) / salesData.length;
+  const bestMonth = salesData.reduce((a, b) => a.revenue > b.revenue ? a : b, salesData[0]);
+
+  /* ---- COUNTER ANIMATION ---- */
+  function animateCounter(el, target, suffix = '', prefix = '', decimals = 0) {
+    const duration = 1200;
+    const start = performance.now();
+    const isCurrency = suffix === '$';
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      const val = target * eased;
+      if (isCurrency) {
+        el.textContent = '$' + val.toLocaleString('en-US', { maximumFractionDigits: 0 });
+      } else {
+        el.textContent = prefix + val.toLocaleString('en-US', { maximumFractionDigits: decimals }) + suffix;
+      }
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  animateCounter(document.getElementById('kpiRevenue'), totalRevenue, '', '$', 0);
+  animateCounter(document.getElementById('kpiUnits'), totalUnits, '', '', 0);
+  animateCounter(document.getElementById('kpiGrowth'), Math.abs(avgGrowth), '%', '', 1);
+  document.getElementById('kpiBestMonth').textContent = bestMonth.month + ' · $' + bestMonth.revenue.toLocaleString();
+
+  /* ---- TABLE ---- */
+  const tbody = document.getElementById('tableBody');
+  salesData.forEach(d => {
+    const growthClass = d.growth >= 0 ? 'text-glow-green' : 'text-glow-rose';
+    const sign = d.growth >= 0 ? '+' : '';
+    const barPct = Math.round((d.revenue / 52300) * 100);
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${d.month}</strong></td>
+        <td class="text-end fw-semibold">$${d.revenue.toLocaleString()}</td>
+        <td class="text-end">${d.units.toLocaleString()}</td>
+        <td class="text-end ${growthClass} fw-semibold">${sign}${d.growth}%</td>
+        <td class="text-end" style="max-width:120px;">
+          <div class="progress" style="height:4px; background: rgba(255,255,255,0.06);">
+            <div class="progress-bar rounded-pill" style="width:${barPct}%; background: linear-gradient(90deg, #8b5cf6, #3b82f6); transition: width 1s ease;"></div>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+
+  /* ---- CHARTS ---- */
+  const chartCtx = document.getElementById('chartMain').getContext('2d');
+
+  const gradient = chartCtx.createLinearGradient(0, 0, 0, 220);
+  gradient.addColorStop(0, 'rgba(139, 92, 246, 0.3)');
+  gradient.addColorStop(1, 'rgba(139, 92, 246, 0.0)');
+
+  new Chart(chartCtx, {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        {
+          label: 'Ingresos',
+          data: salesData.map(d => d.revenue),
+          backgroundColor: 'rgba(139, 92, 246, 0.55)',
+          borderColor: 'rgba(139, 92, 246, 0.8)',
+          borderWidth: 1,
+          borderRadius: 4,
+          borderSkipped: false,
+          yAxisID: 'y',
+          order: 2
+        },
+        {
+          label: 'Unidades',
+          data: salesData.map(d => d.units),
+          type: 'line',
+          borderColor: '#34d399',
+          backgroundColor: 'rgba(52, 211, 153, 0.1)',
+          pointBackgroundColor: '#34d399',
+          pointBorderColor: '#0a0a0f',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          borderWidth: 2.5,
+          tension: 0.35,
+          fill: false,
+          yAxisID: 'y1',
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          align: 'end',
+          labels: {
+            color: 'rgba(255,255,255,0.5)',
+            boxWidth: 10,
+            boxHeight: 10,
+            padding: 16,
+            font: { size: 11 }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(10,10,18,0.9)',
+          borderColor: 'rgba(255,255,255,0.08)',
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 10,
+          titleColor: '#fff',
+          bodyColor: 'rgba(255,255,255,0.7)',
+          callbacks: {
+            label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString()
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 10 } }
+        },
+        y: {
+          position: 'left',
+          grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+          ticks: {
+            color: 'rgba(255,255,255,0.3)',
+            font: { size: 10 },
+            callback: v => '$' + (v / 1000) + 'k'
+          }
+        },
+        y1: {
+          position: 'right',
+          grid: { display: false },
+          ticks: {
+            color: 'rgba(52,211,153,0.5)',
+            font: { size: 10 },
+            callback: v => v.toLocaleString()
+          }
+        }
+      }
+    }
+  });
+
+  /* ---- DONUT ---- */
+  new Chart(document.getElementById('chartDonut').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Electrónica', 'Ropa', 'Hogar', 'Deportes', 'Otros'],
+      datasets: [{
+        data: [38, 22, 18, 12, 10],
+        backgroundColor: ['#8b5cf6', '#3b82f6', '#34d399', '#f59e0b', '#64748b'],
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '70%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: 'rgba(255,255,255,0.5)',
+            boxWidth: 10,
+            boxHeight: 10,
+            padding: 12,
+            font: { size: 10 }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(10,10,18,0.9)',
+          borderColor: 'rgba(255,255,255,0.08)',
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 10,
+          callbacks: {
+            label: ctx => ctx.label + ': ' + ctx.parsed + '%'
+          }
+        }
+      }
+    }
+  });
+
+  /* ---- FADE-IN ON SCROLL ---- */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.fade-section').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.85) {
+      el.classList.add('visible');
+    } else {
+      observer.observe(el);
+    }
+  });
+
+  /* ---- 3D TILT ON KPI CARDS ---- */
+  document.querySelectorAll('.card-kpi').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
+      card.style.transform = `translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+
+  /* ---- NAV LINKS ---- */
+  const navLinks = document.querySelectorAll('[data-nav]');
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+
+      const target = link.dataset.nav;
+      if (target === 'ajustes') {
+        const modal = new bootstrap.Modal(document.getElementById('modalAjustes'));
+        modal.show();
+        return;
+      }
+
+      const section = document.getElementById('section' + target.charAt(0).toUpperCase() + target.slice(1));
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* ---- EXPORT CSV ---- */
+  document.getElementById('btnExportar').addEventListener('click', () => {
+    let csv = 'Mes,Ingresos,Unidades,Crecimiento\n';
+    salesData.forEach(d => {
+      csv += `${d.month},${d.revenue},${d.units},${d.growth}\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ventas_2026.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+});
+</script>
+</body>
+</html>
