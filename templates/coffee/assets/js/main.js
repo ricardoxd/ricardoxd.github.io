@@ -1,5 +1,5 @@
 /* ==========================================
-   CAFÉ CALIENTE — 3D Effects
+   HOT COFFEE — 3D Effects
    ========================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   (() => {
     const el = document.getElementById('heroSubtitle');
     if (!el) return;
-    const text = 'El arte del café de especialidad en cada taza';
+    const text = 'The art of specialty coffee in every cup';
     let i = 0;
     el.textContent = '';
     const type = () => { if (i < text.length) { el.textContent += text.charAt(i++); setTimeout(type, 35 + Math.random() * 25); } };
@@ -272,13 +272,13 @@ document.addEventListener('DOMContentLoaded', () => {
       contactForm.classList.add('was-validated');
       if (contactForm.checkValidity()) {
         formFeedback.className = 'alert alert-success d-block';
-        formFeedback.textContent = '¡Mensaje enviado con éxito! Te contactaremos pronto.';
+        formFeedback.textContent = 'Message sent successfully! We will contact you soon.';
         contactForm.reset();
         contactForm.classList.remove('was-validated');
         setTimeout(() => { formFeedback.className = 'alert d-none'; }, 5000);
       } else {
         formFeedback.className = 'alert alert-danger d-block';
-        formFeedback.textContent = 'Por favor completa todos los campos requeridos.';
+        formFeedback.textContent = 'Please fill in all required fields.';
       }
     });
   }
